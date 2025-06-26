@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Help Center | PBridge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style/help.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <script>
+    const user = JSON.parse(localStorage.getItem("pbridgeUser"));
+    if (!user) window.location.href = "login.html";
+
+    const settings = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
+    if (settings.theme === "dark") document.body.className = "dark";
+    document.documentElement.lang = settings.language || "en";
+    document.documentElement.dir = settings.language === "ar" ? "rtl" : "ltr";
+  </script>
+
+  <nav>
+    <div class="logo">
+      <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="36" />
+      <strong>PBridge</strong>
+    </div>
+    <div class="actions">
+      <button id="lang-toggle">العربية</button>
+      <a href="dashboard.html" class="button" data-en="Back" data-ar="الرجوع">Back</a>
+    </div>
+  </nav>
+
+  <main>
+    <h1 data-en="Help Center" data-ar="مركز المساعدة">Help Center</h1>
+
+    <section class="faq">
+      <h2 data-en="Frequently Asked Questions" data-ar="الأسئلة الشائعة">Frequently Asked Questions</h2>
+
+      <div class="faq-item">
+        <p class="question" data-en="❓ How do I submit a request?" data-ar="❓ كيف أرسل طلب شحنة؟">How do I submit a request?</p>
+        <p class="answer" data-en="Go to the Dashboard and click on 'Submit Request'. Fill in the form and click submit." 
+           data-ar="اذهب إلى لوحة التحكم واضغط على 'طلب شحنة'. املأ النموذج واضغط إرسال.">
+          Go to the Dashboard and click on 'Submit Request'...
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <p class="question" data-en="❓ How do I know if my request is approved?" data-ar="❓ كيف أعرف حالة طلبي؟">How do I know if my request is approved?</p>
+        <p class="answer" data-en="You will see a notification and status update in 'My Requests' page." 
+           data-ar="ستظهر لك إشعارات وتحديث في صفحة 'طلباتي'.">
+          You will see a notification and status...
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <p class="question" data-en="❓ Who can access the Admin Dashboard?" data-ar="❓ من يمكنه دخول لوحة المؤسس؟">Who can access the Admin Dashboard?</p>
+        <p class="answer" data-en="Only users with 'founder' role can access it." 
+           data-ar="فقط المستخدمون الذين لديهم دور 'founder' يمكنهم الدخول.">
+          Only founder-role users can access it...
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <p class="question" data-en="❓ How do I change language or theme?" data-ar="❓ كيف أغير اللغة أو السمة؟">How do I change language or theme?</p>
+        <p class="answer" data-en="Go to Settings page and customize your preferences." 
+           data-ar="اذهب إلى صفحة الإعدادات وقم بتعديل تفضيلاتك.">
+          Go to Settings page...
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let lang = JSON.parse(localStorage.getItem("pbridgeSettings"))?.language || "en";
+    const toggleBtn = document.getElementById("lang-toggle");
+
+    toggleBtn.onclick = () => {
+      lang = lang === "en" ? "ar" : "en";
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      toggleBtn.textContent = lang === "ar" ? "English" : "العربية";
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+
+      const s = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
+      s.language = lang;
+      localStorage.setItem("pbridgeSettings", JSON.stringify(s));
+    };
+
+    document.querySelectorAll("[data-en]").forEach(el => {
+      el.textContent = el.getAttribute(`data-${lang}`);
+    });
+  </script>
+</body>
+</html>
