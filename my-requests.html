@@ -71,17 +71,25 @@
                         : req.status === "rejected" ? "crimson"
                         : "gray";
 
-        const typeLabel = req.shipmentType === "local"
+        const shipmentType = req.shipmentType === "local"
           ? (lang === "ar" ? "محلية" : "Local")
           : (lang === "ar" ? "دولية" : "International");
 
+        const payMethod = req.founderPayMethod === "bank"
+          ? (lang === "ar" ? "حوالة مصرفية" : "Bank Transfer")
+          : (lang === "ar" ? "عبر Pi" : "Pi");
+
         box.innerHTML = `
-          <p><strong>${lang === "ar" ? "الدولة" : "Country"}:</strong> ${req.country}</p>
+          <p><strong>${lang === "ar" ? "المورد" : "Supplier"}:</strong> ${req.supplier}</p>
+          <p><strong>${lang === "ar" ? "البلد" : "Country"}:</strong> ${req.country}</p>
           <p><strong>${lang === "ar" ? "المنتج" : "Product"}:</strong> ${req.product}</p>
-          <p><strong>${lang === "ar" ? "الإجمالي" : "Total"}:</strong> ${req.total} Pi</p>
-          <p><strong>${lang === "ar" ? "نوع الشحنة" : "Shipment Type"}:</strong> ${typeLabel}</p>
+          <p><strong>${lang === "ar" ? "قيمة الفاتورة" : "Invoice"}:</strong> ${req.total} Pi</p>
+          <p><strong>${lang === "ar" ? "نوع الشحنة" : "Shipment Type"}:</strong> ${shipmentType}</p>
+          <p><strong>${lang === "ar" ? "العمولة" : "Commission"}:</strong> ${req.commissionLYD} LYD</p>
+          <p><strong>${lang === "ar" ? "دفع العمولة للمؤسس" : "Founder Fee Payment"}:</strong> ${payMethod}</p>
+          <p><strong>${lang === "ar" ? "ملاحظات" : "Note"}:</strong> ${req.note || "-"}</p>
           <p><strong>${lang === "ar" ? "الحالة" : "Status"}:</strong> <span style="color:${statusColor}; font-weight:bold">${lang === "ar"
-            ? (req.status === "approved" ? "موافَق عليه" : req.status === "rejected" ? "مرفوض" : "قيد الانتظار")
+            ? (req.status === "approved" ? "موافق عليه" : req.status === "rejected" ? "مرفوض" : "قيد الانتظار")
             : (req.status === "approved" ? "Approved" : req.status === "rejected" ? "Rejected" : "Pending")}</span></p>
         `;
         container.appendChild(box);
