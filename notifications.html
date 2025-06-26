@@ -2,12 +2,22 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Notifications | PBridge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="style/notifications.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
 </head>
 <body>
+  <script>
+    const user = JSON.parse(localStorage.getItem("pbridgeUser"));
+    if (!user) window.location.href = "login.html";
+
+    const settings = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
+    if (settings.theme === "dark") document.body.className = "dark";
+    document.documentElement.lang = settings.language || "en";
+    document.documentElement.dir = settings.language === "ar" ? "rtl" : "ltr";
+  </script>
+
   <nav>
     <div class="logo">
       <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="36" />
@@ -25,7 +35,7 @@
   </main>
 
   <script>
-    let lang = "en";
+    let lang = JSON.parse(localStorage.getItem("pbridgeSettings"))?.language || "en";
     const toggleBtn = document.getElementById("lang-toggle");
 
     toggleBtn.onclick = () => {
@@ -39,9 +49,8 @@
       renderNotifications();
     };
 
-    const currentUser = JSON.parse(localStorage.getItem("pbridgeUser"));
     const allNotifs = JSON.parse(localStorage.getItem("pbridgeNotifications")) || [];
-    const myNotifs = allNotifs.filter(n => n.email === currentUser?.email);
+    const myNotifs = allNotifs.filter(n => n.email === user?.email);
     const container = document.getElementById("notifications-container");
 
     function renderNotifications() {
