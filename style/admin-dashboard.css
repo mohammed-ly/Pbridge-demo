@@ -1,0 +1,73 @@
+body {
+  font-family: 'Inter', 'Cairo', sans-serif;
+  background: url('../assets/bg-bridge-modern.jpg') no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  min-height: 100vh;
+}
+
+main {
+  padding: 60px 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2em;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.request-box {
+  background-color: rgba(255, 255, 255, 0.96);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+}
+
+.request-box p {
+  margin: 5px 0;
+  font-size: 1em;
+}
+
+.request-box .actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.request-box .actions button {
+  padding: 10px 20px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95em;
+  transition: background-color 0.3s;
+}
+
+.request-box .actions button:first-child {
+  background-color: #4caf50;
+  color: white;
+}
+
+.request-box .actions button:first-child:hover {
+  background-color: #3e8e41;
+}
+
+.request-box .actions button:last-child {
+  background-color: #f44336;
+  color: white;
+}
+
+.request-box .actions button:last-child:hover {
+  background-color: #d32f2f;
+}
