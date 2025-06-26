@@ -1,135 +1,41 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-  <meta charset="UTF-8" />
-  <title>Submit Request | PBridge</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="style/submit-request.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
-</head>
-<body>
-  <script>
-    const user = JSON.parse(localStorage.getItem("pbridgeUser"));
-    if (!user) window.location.href = "login.html";
+<!-- الكود السابق يبقى كما هو دون تغيير -->
+<script>
+  const form = document.getElementById("requestForm");
 
-    const settings = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
-    if (settings.theme === "dark") document.body.className = "dark";
-    document.documentElement.lang = settings.language || "en";
-    document.documentElement.dir = settings.language === "ar" ? "rtl" : "ltr";
-  </script>
+  form.onsubmit = e => {
+    e.preventDefault();
 
-  <nav>
-    <div class="logo">
-      <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="36" />
-      <strong>PBridge</strong>
-    </div>
-    <div class="actions">
-      <button id="lang-toggle">العربية</button>
-      <a href="dashboard.html" class="button" data-en="Back" data-ar="الرجوع">Back</a>
-    </div>
-  </nav>
-
-  <main>
-    <h1 data-en="Submit Shipping Request" data-ar="إرسال طلب شحنة">Submit Shipping Request</h1>
-
-    <form id="requestForm">
-      <label>
-        <span data-en="Supplier Name" data-ar="اسم المورد / الشركة">Supplier Name</span>
-        <input type="text" name="supplier" required />
-      </label>
-
-      <label>
-        <span data-en="Country" data-ar="الدولة">Country</span>
-        <input type="text" name="country" required />
-      </label>
-
-      <label>
-        <span data-en="Product" data-ar="المنتج">Product</span>
-        <input type="text" name="product" required />
-      </label>
-
-      <label>
-        <span data-en="Invoice Total (Pi)" data-ar="قيمة الفاتورة (Pi)">Invoice Total (Pi)</span>
-        <input type="number" name="total" required />
-      </label>
-
-      <label>
-        <span data-en="Shipment Type" data-ar="نوع الشحنة">Shipment Type</span>
-        <select name="shipmentType" required>
-          <option value="local" data-en="Local (within Libya)" data-ar="محلية (داخل ليبيا)">Local</option>
-          <option value="international" data-en="International" data-ar="دولية">International</option>
-        </select>
-      </label>
-
-      <label>
-        <span data-en="Commission Paid to You (in LYD)" data-ar="العمولة المستلمة من التاجر (دينار ليبي)">Commission Paid to You</span>
-        <input type="number" name="commission" required />
-      </label>
-
-      <label>
-        <span data-en="Founder’s Fee Payment Method" data-ar="طريقة دفع عمولة المؤسس">Founder’s Fee Payment Method</span>
-        <select name="founderPayMethod" required>
-          <option value="pi" data-en="Via Pi" data-ar="عبر Pi">Via Pi</option>
-          <option value="bank" data-en="Bank Transfer" data-ar="حوالة مصرفية">Bank Transfer</option>
-        </select>
-      </label>
-
-      <label>
-        <span data-en="Note or Reference No." data-ar="ملاحظة أو رقم مرجعي للفاتورة">Note / Reference</span>
-        <textarea name="note" rows="2"></textarea>
-      </label>
-
-      <p style="font-weight:bold; color:#c42">
-        🔒 Only Pi is accepted for supplier payment — local currency is not allowed.
-      </p>
-
-      <button type="submit" data-en="Submit Request" data-ar="إرسال الطلب">Submit Request</button>
-    </form>
-  </main>
-
-  <script>
-    let lang = JSON.parse(localStorage.getItem("pbridgeSettings"))?.language || "en";
-    const toggleBtn = document.getElementById("lang-toggle");
-
-    toggleBtn.onclick = () => {
-      lang = lang === "en" ? "ar" : "en";
-      document.documentElement.lang = lang;
-      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-      toggleBtn.textContent = lang === "ar" ? "English" : "العربية";
-      document.querySelectorAll("[data-en]").forEach(el => {
-        el.textContent = el.getAttribute(`data-${lang}`);
-      });
+    const requests = JSON.parse(localStorage.getItem("pbridgeRequests")) || [];
+    const request = {
+      client: user.name,
+      email: user.email,
+      supplier: form.supplier.value,
+      country: form.country.value,
+      product: form.product.value,
+      total: form.total.value,
+      shipmentType: form.shipmentType.value,
+      commissionLYD: form.commission.value,
+      founderPayMethod: form.founderPayMethod.value,
+      note: form.note.value,
+      status: "pending",
+      time: new Date().toISOString()
     };
 
-    document.querySelectorAll("[data-en]").forEach(el => {
-      el.textContent = el.getAttribute(`data-${lang}`);
+    requests.push(request);
+    localStorage.setItem("pbridgeRequests", JSON.stringify(requests));
+
+    // ✅ إضافة سجل النشاط
+    const logs = JSON.parse(localStorage.getItem("pbridgeActivity")) || [];
+    logs.push({
+      actor: user.name,
+      role: user.role || "agent",
+      action: "submitted",
+      time: new Date().toISOString(),
+      reference: `طلب من ${form.country.value} إلى ${form.supplier.value}`
     });
+    localStorage.setItem("pbridgeActivity", JSON.stringify(logs));
 
-    const form = document.getElementById("requestForm");
-    form.onsubmit = e => {
-      e.preventDefault();
-
-      const requests = JSON.parse(localStorage.getItem("pbridgeRequests")) || [];
-      const req = {
-        client: user.name,
-        email: user.email,
-        supplier: form.supplier.value,
-        country: form.country.value,
-        product: form.product.value,
-        total: form.total.value,
-        shipmentType: form.shipmentType.value,
-        commissionLYD: form.commission.value,
-        founderPayMethod: form.founderPayMethod.value,
-        note: form.note.value,
-        status: "pending",
-        time: new Date().toISOString()
-      };
-      requests.push(req);
-      localStorage.setItem("pbridgeRequests", JSON.stringify(requests));
-
-      alert(lang === "ar" ? "تم إرسال الطلب بنجاح ✅" : "Request submitted successfully ✅");
-      form.reset();
-    };
-  </script>
-</body>
-</html>
+    alert(lang === "ar" ? "تم إرسال الطلب بنجاح ✅" : "Request submitted successfully ✅");
+    form.reset();
+  };
+</script>
