@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Add New Agent | PBridge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style/add-agent.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <script>
+    const user = JSON.parse(localStorage.getItem("pbridgeUser"));
+    if (!user || user.role !== "founder") window.location.href = "login.html";
+
+    const settings = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
+    if (settings.theme === "dark") document.body.classList.add("dark");
+    document.documentElement.lang = settings.language || "en";
+    document.documentElement.dir = settings.language === "ar" ? "rtl" : "ltr";
+  </script>
+
+  <nav>
+    <div class="logo">
+      <img src="logo/logo-pbridge-transparent.png" height="36" />
+      <strong>PBridge – Add Agent</strong>
+    </div>
+    <div class="actions">
+      <button id="lang-toggle">العربية</button>
+      <a href="agents.html" class="button" data-en="View Agents" data-ar="عرض الوكلاء">View</a>
+    </div>
+  </nav>
+
+  <main>
+    <h1 data-en="Register New Agent" data-ar="تسجيل وكيل جديد">Register New Agent</h1>
+    <form id="agentForm">
+      <label>
+        <span data-en="Agent Name" data-ar="اسم الوكيل">Agent Name</span>
+        <input type="text" name="name" required />
+      </label>
+
+      <label>
+        <span data-en="City" data-ar="المدينة">City</span>
+        <input type="text" name="city" required />
+      </label>
+
+      <label>
+        <span data-en="Phone Number" data-ar="رقم الهاتف">Phone</span>
+        <input type="tel" name="phone" required />
+      </label>
+
+      <label>
+        <span data-en="Services Provided" data-ar="الخدمات المقدّمة">Services</span>
+        <input type="text" name="services" required />
+      </label>
+
+      <label>
+        <span data-en="Experience (years)" data-ar="عدد سنوات الخبرة">Experience</span>
+        <input type="number" name="experience" required />
+      </label>
+
+      <label>
+        <span data-en="Additional Notes" data-ar="ملاحظات إضافية">Notes</span>
+        <textarea name="notes" rows="2"></textarea>
+      </label>
+
+      <button type="submit" data-en="Add Agent" data-ar="إضافة وكيل">Add Agent</button>
+    </form>
+  </main>
+
+  <script>
+    let lang = settings.language || "en";
+    const toggleBtn = document.getElementById("lang-toggle");
+
+    toggleBtn.onclick = () => {
+      lang = lang === "en" ? "ar" : "en";
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      toggleBtn.textContent = lang === "ar" ? "English" : "العربية";
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+    };
+
+    document.querySelectorAll("[data-en]").forEach(el => {
+      el.textContent = el.getAttribute(`data-${lang}`);
+    });
+
+    const form = document.getElementById("agentForm");
+    form.onsubmit = e => {
+      e.preventDefault();
+      const agents = JSON.parse(localStorage.getItem("pbridgeAgents")) || [];
+
+      const data = {
+        name: form.name.value,
+        city: form.city.value,
+        phone: form.phone.value,
+        services: form.services.value,
+        experience: form.experience.value + " " + (lang === "ar" ? "سنة" : "years"),
+        notes: form.notes.value,
+        addedAt: new Date().toISOString()
+      };
+
+      agents.push(data);
+      localStorage.setItem("pbridgeAgents", JSON.stringify(agents));
+      alert(lang === "ar" ? "تمت إضافة الوكيل بنجاح" : "Agent added successfully");
+      form.reset();
+    };
+  </script>
+</body>
+</html>
