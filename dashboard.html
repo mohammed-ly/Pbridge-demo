@@ -13,7 +13,10 @@
       <img src="logo/logo-pbridge-transparent.png" alt="PBridge Logo" height="36" />
       <strong>PBridge</strong>
     </div>
-    <button id="logoutBtn">Log out</button>
+    <div>
+      <button id="lang-toggle">العربية</button>
+      <button id="logoutBtn">Log out</button>
+    </div>
   </nav>
 
   <main>
@@ -21,14 +24,17 @@
       <h2 id="welcome">Welcome</h2>
       <p id="roleInfo"></p>
       <div class="options">
-        <button disabled>📝 Request Service</button>
-        <button disabled>📦 My Orders</button>
-        <button disabled>⚙️ Account Settings</button>
+        <button disabled id="reqBtn">📝 Request Service</button>
+        <button disabled id="ordersBtn">📦 My Orders</button>
+        <button disabled id="settingsBtn">⚙️ Account Settings</button>
       </div>
     </div>
   </main>
 
   <script>
+    let lang = "en";
+    const toggleBtn = document.getElementById("lang-toggle");
+    const logoutBtn = document.getElementById("logoutBtn");
     const user = JSON.parse(localStorage.getItem("pbridgeUser"));
     const loggedIn = localStorage.getItem("loggedIn");
 
@@ -36,13 +42,40 @@
       window.location.href = "login.html";
     }
 
-    document.getElementById("welcome").textContent = `Welcome, ${user.name}`;
-    document.getElementById("roleInfo").textContent = `You are logged in as: ${user.role}`;
+    const welcome = document.getElementById("welcome");
+    const roleInfo = document.getElementById("roleInfo");
 
-    document.getElementById("logoutBtn").onclick = () => {
+    const roleNames = {
+      agent: { en: "Agent", ar: "وكيل" },
+      trader: { en: "Trader", ar: "تاجر" },
+      company: { en: "Company", ar: "شركة" }
+    };
+
+    const updateLanguage = () => {
+      document.documentElement.lang = lang;
+      document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
+      toggleBtn.textContent = (lang === "ar") ? "English" : "العربية";
+      logoutBtn.textContent = (lang === "ar") ? "تسجيل الخروج" : "Log out";
+      welcome.textContent = (lang === "ar") ? `مرحبًا، ${user.name}` : `Welcome, ${user.name}`;
+      roleInfo.textContent = (lang === "ar")
+        ? `نوع الحساب: ${roleNames[user.role].ar}`
+        : `You are logged in as: ${roleNames[user.role].en}`;
+      document.getElementById("reqBtn").textContent = (lang === "ar") ? "📝 طلب خدمة" : "📝 Request Service";
+      document.getElementById("ordersBtn").textContent = (lang === "ar") ? "📦 طلباتي" : "📦 My Orders";
+      document.getElementById("settingsBtn").textContent = (lang === "ar") ? "⚙️ إعدادات الحساب" : "⚙️ Account Settings";
+    };
+
+    toggleBtn.onclick = () => {
+      lang = (lang === "en") ? "ar" : "en";
+      updateLanguage();
+    };
+
+    logoutBtn.onclick = () => {
       localStorage.removeItem("loggedIn");
       window.location.href = "login.html";
     };
+
+    updateLanguage(); // تعيين اللغة تلقائيًا عند الدخول
   </script>
 </body>
 </html>
