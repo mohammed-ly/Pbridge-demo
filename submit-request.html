@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submit Request | PBridge</title>
+  <link rel="stylesheet" href="style/request.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="36" />
+      <strong>PBridge</strong>
+    </div>
+    <div class="actions">
+      <button id="lang-toggle">العربية</button>
+      <a href="dashboard.html" class="button" data-en="Back" data-ar="الرجوع">Back</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="form-box">
+      <h2 data-en="Submit New Request" data-ar="إرسال طلب جديد">Submit New Request</h2>
+      <form id="requestForm">
+        <label data-en="Client Name" data-ar="اسم العميل">Client Name</label>
+        <input type="text" id="clientName" required />
+
+        <label data-en="Country" data-ar="البلد">Country</label>
+        <input type="text" id="country" required />
+
+        <label data-en="Product Type" data-ar="نوع المنتج">Product Type</label>
+        <input type="text" id="productType" required />
+
+        <label data-en="Total Value (Pi)" data-ar="القيمة الإجمالية (باي)">Total Value (Pi)</label>
+        <input type="number" id="totalValue" required />
+
+        <p id="commissionInfo"></p>
+        <p id="balanceWarning" style="color: red; display: none;" data-en="Insufficient balance to submit request." data-ar="الرصيد غير كافٍ لإرسال الطلب.">Insufficient balance to submit request.</p>
+
+        <button type="submit" id="submitBtn" data-en="Submit" data-ar="إرسال">Submit</button>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    let lang = "en";
+    const commissionRate = 0.03;
+    let balance = 10.0; // رصيد الوكيل (افتراضي الآن)
+
+    const toggleBtn = document.getElementById("lang-toggle");
+    toggleBtn.onclick = () => {
+      lang = lang === "en" ? "ar" : "en";
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      toggleBtn.textContent = lang === "ar" ? "English" : "العربية";
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+    };
+
+    const form = document.getElementById("requestForm");
+    const totalValue = document.getElementById("totalValue");
+    const submitBtn = document.getElementById("submitBtn");
+    const commissionInfo = document.getElementById("commissionInfo");
+    const balanceWarning = document.getElementById("balanceWarning");
+
+    totalValue.oninput = () => {
+      const value = parseFloat(totalValue.value);
+      const commission = value * commissionRate;
+      commissionInfo.innerText = lang === "ar"
+        ? `العمولة المطلوبة: ${commission.toFixed(2)} باي (3%)`
+        : `Required commission: ${commission.toFixed(2)} Pi (3%)`;
+
+      if (balance < commission) {
+        submitBtn.disabled = true;
+        balanceWarning.style.display = "block";
+      } else {
+        submitBtn.disabled = false;
+        balanceWarning.style.display = "none";
+      }
+    };
+
+    form.onsubmit = e => {
+      e.preventDefault();
+      alert(lang === "ar" ? "تم إرسال الطلب بنجاح!" : "Request submitted successfully!");
+      form.reset();
+      commissionInfo.innerText = "";
+    };
+  </script>
+</body>
+</html>
