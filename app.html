@@ -2,48 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>PBridge App | Pi SDK Test</title>
+  <title>PBridge App | Pi SDK</title>
   <script defer src="https://sdk.minepi.com/pi-sdk.js"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f4f4;
-      text-align: center;
-      padding: 40px;
-    }
-    h1 {
-      color: #6f42c1;
-    }
-    button {
-      background-color: #6f42c1;
-      color: white;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      margin: 10px;
-    }
-    #username {
-      margin-top: 20px;
-      font-size: 18px;
-      color: #333;
-    }
-  </style>
+  <link rel="stylesheet" href="style/main.css" />
 </head>
 <body>
-  <h1>PBridge Trade – App</h1>
-  <p>Login with Pi and try a test transaction!</p>
-  <button id="login-btn">🔐 Sign in with Pi</button>
-  <p id="username"></p>
-  <button id="pay-btn" style="display:none;">💸 Send 0.01π Testnet Payment</button>
+  <header>
+    <h1>PBridge App</h1>
+    <p>Interact with Pi Testnet securely</p>
+  </header>
+
+  <main>
+    <button id="login-btn">🔐 Sign in with Pi</button>
+    <p id="username" style="margin-top: 20px;"></p>
+    <button id="pay-btn" style="display: none;">💸 Send 0.01π Test Payment</button>
+  </main>
 
   <script>
     const Pi = window.Pi;
     Pi.init({ version: "2.0", sandbox: true });
 
     const loginBtn = document.getElementById("login-btn");
-    const usernameEl = document.getElementById("username");
+    const userEl = document.getElementById("username");
     const payBtn = document.getElementById("pay-btn");
 
     loginBtn.onclick = async () => {
@@ -51,23 +31,22 @@
         const scopes = ["username", "payments"];
         const result = await Pi.authenticate(scopes);
         const username = result.user.username;
-        usernameEl.textContent = "👋 Welcome @" + username;
+        userEl.textContent = "👤 Welcome @" + username;
         payBtn.style.display = "inline-block";
 
         payBtn.onclick = async () => {
           const payment = await Pi.createPayment({
             amount: 0.01,
-            memo: "Test payment from PBridge App",
-            metadata: { app: "pbridge", test: true }
+            memo: "Test payment from PBridge",
+            metadata: { test: true }
           });
-
-          payment.onReadyForServerApproval(() => console.log("Ready for server approval"));
+          payment.onReadyForServerApproval(() => console.log("Ready for approval"));
           payment.onReadyForServerCompletion(() => payment.complete());
-          payment.onCancel(() => alert("❌ Payment cancelled."));
-          payment.onError((err) => alert("❗ Error: " + err));
+          payment.onCancel(() => alert("Payment cancelled."));
+          payment.onError((err) => alert("Error: " + err));
         };
       } catch (err) {
-        alert("Login failed: " + err.message);
+        alert("Login failed: " + err);
       }
     };
   </script>
