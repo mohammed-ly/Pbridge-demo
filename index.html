@@ -2,48 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PBridge Trade | Pi SDK Demo</title>
-  <script defer src="https://sdk.minepi.com/pi-sdk.js"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f8f9fa;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
-    header {
-      background-color: #6f42c1;
-      color: white;
-      padding: 20px 0;
-    }
-    main {
-      max-width: 600px;
-      margin: 40px auto;
-      background: #fff;
-      border-radius: 10px;
-      padding: 30px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    button {
-      background-color: #6f42c1;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    button:hover {
-      background-color: #5936a7;
-    }
-    #username {
-      font-size: 18px;
-      margin-top: 20px;
-    }
-  </style>
+  <title>PBridge Trade | Home</title>
+  <link rel="stylesheet" href="style/main.css" />
 </head>
 <body>
   <header>
@@ -52,57 +12,15 @@
   </header>
 
   <main>
-    <p>Connect with traders and partners using Pi Network's secure Testnet.</p>
-    <button id="login-btn">Sign in with Pi</button>
-    <p id="username"></p>
-    <button id="pay-btn" style="display:none;">Send 0.01π Test Payment</button>
+    <p>Welcome to PBridge Trade, your gateway to Pi-powered supply chain trade.</p>
+    <a href="app.html">
+      <button>🚀 Launch App</button>
+    </a>
   </main>
 
-  <script>
-    const Pi = window.Pi;
-    Pi.init({ version: "2.0", sandbox: true });
-
-    const loginBtn = document.getElementById("login-btn");
-    const userLabel = document.getElementById("username");
-    const payBtn = document.getElementById("pay-btn");
-
-    loginBtn.onclick = async () => {
-      try {
-        const scopes = ["username", "payments"];
-        const authResult = await Pi.authenticate(scopes);
-        const username = authResult.user.username;
-        userLabel.textContent = "👤 Welcome, @" + username;
-        payBtn.style.display = "inline-block";
-
-        payBtn.onclick = async () => {
-          const paymentData = {
-            amount: 0.01,
-            memo: "PBridge Test Transaction",
-            metadata: { type: "demo" }
-          };
-
-          const payment = await Pi.createPayment(paymentData);
-
-          payment.onReadyForServerApproval(() => {
-            console.log("Ready for approval");
-          });
-
-          payment.onReadyForServerCompletion(() => {
-            payment.complete();
-          });
-
-          payment.onCancel(() => {
-            alert("Payment cancelled.");
-          });
-
-          payment.onError((err) => {
-            alert("Payment error: " + err);
-          });
-        };
-      } catch (error) {
-        alert("Login failed: " + error);
-      }
-    };
-  </script>
+  <footer>
+    <a href="privacy-policy.html">Privacy Policy</a> | 
+    <a href="terms.html">Terms of Service</a>
+  </footer>
 </body>
 </html>
