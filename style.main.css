@@ -1,95 +1,121 @@
-/* خطوط موحدة للعربية والإنجليزية */
+/* الخطوط العامة */
 body {
   font-family: 'Inter', 'Cairo', sans-serif;
-  background-color: #f4f6f9;
-  color: #333;
-  text-align: center;
   margin: 0;
   padding: 0;
+  background: linear-gradient(to bottom right, #ece9f1, #f8f5ff);
+  color: #333;
+  direction: ltr;
 }
 
-/* رأس الصفحة */
-header {
+/* شريط التنقل */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: #6f42c1;
   color: white;
-  padding: 40px 0;
+  padding: 15px 30px;
 }
 
-header h1 {
-  font-weight: 700;
-  font-size: 2em;
-  margin: 0;
+.logo {
+  font-size: 1.5em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-header p {
-  font-size: 1.1em;
-  margin: 10px 0 20px;
-}
-
+/* زر اللغة */
 #lang-toggle {
   background-color: white;
   color: #6f42c1;
-  border: 2px solid white;
-  padding: 8px 16px;
   font-weight: bold;
-  border-radius: 6px;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s;
-  font-size: 14px;
+  transition: 0.3s;
 }
 
 #lang-toggle:hover {
   background-color: #e6d6fd;
 }
 
-/* المحتوى الرئيسي */
-main {
+/* رأس الصفحة */
+header {
+  text-align: center;
+  padding: 60px 20px 30px;
+}
+
+header h1 {
+  font-size: 2em;
+  margin: 0;
+  font-weight: 700;
+}
+
+header p {
+  font-size: 1.1em;
+  margin-top: 10px;
+  color: #555;
+}
+
+/* الحاوية الرئيسية للبطاقات */
+.card-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
   padding: 40px 20px;
 }
 
-/* أزرار الأدوار */
-button {
-  background-color: #6f42c1;
-  color: white;
-  border: none;
-  padding: 14px 30px;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  margin: 10px;
-  transition: background-color 0.3s ease;
+/* بطاقة الدور */
+.role-card {
+  background: white;
+  border-radius: 10px;
+  padding: 30px 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 240px;
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-button:hover {
-  background-color: #5936a7;
+.role-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
-/* قائمة الأدوار */
-.roles {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-width: 320px;
-  margin: 20px auto;
+.role-card .icon {
+  font-size: 3em;
+  margin-bottom: 10px;
+}
+
+.role-card h3 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.1em;
 }
 
 /* التذييل */
 footer {
-  margin-top: 40px;
+  background-color: #f4f4f4;
+  color: #666;
+  text-align: center;
   padding: 20px;
-  font-size: 14px;
-  color: #555;
+  font-size: 0.9em;
+  margin-top: 40px;
 }
 
-/* دعم الاتجاه من اليمين لليسار */
-html[dir="rtl"] body {
+/* دعم RTL */
+html[dir="rtl"] {
   direction: rtl;
 }
 
-html[dir="rtl"] .roles {
-  align-items: center;
+html[dir="rtl"] .card-container {
+  justify-content: center;
 }
 
-a {
-  text-decoration: none;
+html[dir="rtl"] .logo {
+  flex-direction: row-reverse;
 }
