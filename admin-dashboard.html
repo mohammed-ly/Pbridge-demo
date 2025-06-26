@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard | PBridge</title>
+  <link rel="stylesheet" href="style/admin-dashboard.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="36" />
+      <strong>PBridge Admin</strong>
+    </div>
+    <div class="actions">
+      <button id="lang-toggle">العربية</button>
+      <a href="dashboard.html" class="button" data-en="Back" data-ar="الرجوع">Back</a>
+    </div>
+  </nav>
+
+  <main>
+    <h1 data-en="Pending Requests" data-ar="الطلبات قيد المراجعة">Pending Requests</h1>
+    <div id="requests-container" class="container"></div>
+  </main>
+
+  <script>
+    let lang = "en";
+    const toggleBtn = document.getElementById("lang-toggle");
+
+    toggleBtn.onclick = () => {
+      lang = lang === "en" ? "ar" : "en";
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      toggleBtn.textContent = lang === "ar" ? "English" : "العربية";
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+    };
+
+    const requests = JSON.parse(localStorage.getItem("pbridgeRequests")) || [];
+    const container = document.getElementById("requests-container");
+
+    function renderRequests() {
+      container.innerHTML = "";
+      if (requests.length === 0) {
+        container.innerHTML = lang === "ar" ? "<p>لا توجد طلبات حالياً</p>" : "<p>No pending requests</p>";
+        return;
+      }
+
+      requests.forEach((req, index) => {
+        const box = document.createElement("div");
+        box.className = "request-box";
+        box.innerHTML = `
+          <p><strong>${lang === "ar" ? "العميل" : "Client"}:</strong> ${req.client}</p>
+          <p><strong>${lang === "ar" ? "البلد" : "Country"}:</strong> ${req.country}</p>
+          <p><strong>${lang === "ar" ? "المنتج" : "Product"}:</strong> ${req.product}</p>
+          <p><strong>${lang === "ar" ? "القيمة" : "Total"}:</strong> ${req.total} Pi</p>
+          <div class="actions">
+            <button onclick="approve(${index})">${lang === "ar" ? "موافقة" : "Approve"}</button>
+            <button onclick="reject(${index})">${lang === "ar" ? "رفض" : "Reject"}</button>
+          </div>
+        `;
+        container.appendChild(box);
+      });
+    }
+
+    function approve(i) {
+      alert(lang === "ar" ? "تمت الموافقة على الطلب!" : "Request approved!");
+      requests.splice(i, 1);
+      localStorage.setItem("pbridgeRequests", JSON.stringify(requests));
+      renderRequests();
+    }
+
+    function reject(i) {
+      alert(lang === "ar" ? "تم رفض الطلب." : "Request rejected.");
+      requests.splice(i, 1);
+      localStorage.setItem("pbridgeRequests", JSON.stringify(requests));
+      renderRequests();
+    }
+
+    renderRequests();
+  </script>
+</body>
+</html>
