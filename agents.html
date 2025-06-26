@@ -50,33 +50,15 @@
       el.textContent = el.getAttribute(`data-${lang}`);
     });
 
-    const agents = [
-      {
-        name: "أحمد المغربي",
-        city: "طرابلس",
-        experience: "3 سنوات",
-        phone: "092-1234567",
-        services: "استيراد إلكترونيات"
-      },
-      {
-        name: "سالم بوهديمة",
-        city: "بنغازي",
-        experience: "5 سنوات",
-        phone: "091-9876543",
-        services: "معدات طبية وزراعية"
-      },
-      {
-        name: "خديجة الزوي",
-        city: "سبها",
-        experience: "4 سنوات",
-        phone: "094-6543210",
-        services: "مستلزمات نسائية وتجارية"
-      }
-    ];
+    const container = document.getElementById("agents-list");
+    const agents = JSON.parse(localStorage.getItem("pbridgeAgents")) || [];
 
     function renderAgents() {
-      const container = document.getElementById("agents-list");
       container.innerHTML = "";
+      if (agents.length === 0) {
+        container.innerHTML = `<p>${lang === "ar" ? "لا يوجد وكلاء مسجلين حالياً" : "No agents registered yet."}</p>`;
+        return;
+      }
 
       agents.forEach(agent => {
         const card = document.createElement("div");
@@ -85,9 +67,10 @@
         card.innerHTML = `
           <h3>${agent.name}</h3>
           <p><strong>${lang === "ar" ? "المدينة" : "City"}:</strong> ${agent.city}</p>
+          <p><strong>${lang === "ar" ? "رقم الهاتف" : "Phone"}:</strong> ${agent.phone}</p>
+          <p><strong>${lang === "ar" ? "الخدمة" : "Services"}:</strong> ${agent.services}</p>
           <p><strong>${lang === "ar" ? "الخبرة" : "Experience"}:</strong> ${agent.experience}</p>
-          <p><strong>${lang === "ar" ? "الخدمة" : "Service"}:</strong> ${agent.services}</p>
-          <p><strong>${lang === "ar" ? "الهاتف" : "Phone"}:</strong> ${agent.phone}</p>
+          ${agent.notes ? `<p><strong>${lang === "ar" ? "ملاحظات" : "Notes"}:</strong> ${agent.notes}</p>` : ""}
         `;
         container.appendChild(card);
       });
