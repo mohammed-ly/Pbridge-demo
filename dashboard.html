@@ -6,6 +6,17 @@
   <title>Dashboard | PBridge</title>
   <link rel="stylesheet" href="style/dashboard.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    #notificationBar {
+      display: none;
+      padding: 15px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1em;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <nav>
@@ -20,6 +31,8 @@
   </nav>
 
   <main>
+    <div id="notificationBar"></div>
+
     <div class="container">
       <h1 id="welcome" data-en="Welcome," data-ar="مرحبًا،">Welcome,</h1>
       <p id="roleInfo" data-en="You are logged in as:" data-ar="أنت مسجل الدخول كـ:">You are logged in as:</p>
@@ -56,10 +69,33 @@
     }
 
     document.getElementById("logoutBtn").onclick = () => {
-      localStorage.removeItem("pbridgeUser");
       localStorage.removeItem("loggedIn");
+      localStorage.removeItem("pbridgeUser");
       window.location.href = "login.html";
     };
+
+    // ✅ إشعارات المستخدم
+    const notifBar = document.getElementById("notificationBar");
+    const allNotifs = JSON.parse(localStorage.getItem("pbridgeNotifications")) || [];
+    const myNotifs = allNotifs.filter(n => n.email === user?.email);
+
+    if (myNotifs.length > 0) {
+      const latest = myNotifs[myNotifs.length - 1];
+      notifBar.innerText = latest.message;
+      notifBar.style.backgroundColor = latest.type === "success"
+        ? "#4CAF50"
+        : latest.type === "error"
+          ? "#f44336"
+          : latest.type === "info"
+            ? "#2196F3"
+            : "#ffc107";
+
+      notifBar.style.display = "block";
+
+      // إخفاء بعد 8 ثوانٍ أو بالنقر
+      setTimeout(() => notifBar.style.display = "none", 8000);
+      notifBar.onclick = () => notifBar.style.display = "none";
+    }
   </script>
 </body>
 </html>
