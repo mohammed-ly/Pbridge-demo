@@ -40,6 +40,7 @@
       <div class="actions">
         <a href="submit-request.html" class="btn" data-en="Submit Request" data-ar="طلب شحنة">Submit Request</a>
         <a href="my-requests.html" class="btn" data-en="My Requests" data-ar="طلباتي">My Requests</a>
+        <a href="notifications.html" class="btn" data-en="Notifications" data-ar="الإشعارات">Notifications</a>
         <a href="about.html" class="btn" data-en="About PBridge" data-ar="حول PBridge">About PBridge</a>
       </div>
     </div>
@@ -74,7 +75,7 @@
       window.location.href = "login.html";
     };
 
-    // ✅ إشعارات المستخدم
+    // إشعار مباشر للمستخدم الحالي
     const notifBar = document.getElementById("notificationBar");
     const allNotifs = JSON.parse(localStorage.getItem("pbridgeNotifications")) || [];
     const myNotifs = allNotifs.filter(n => n.email === user?.email);
@@ -82,17 +83,15 @@
     if (myNotifs.length > 0) {
       const latest = myNotifs[myNotifs.length - 1];
       notifBar.innerText = latest.message;
-      notifBar.style.backgroundColor = latest.type === "success"
-        ? "#4CAF50"
-        : latest.type === "error"
-          ? "#f44336"
-          : latest.type === "info"
-            ? "#2196F3"
-            : "#ffc107";
+
+      notifBar.style.backgroundColor =
+        latest.type === "success" ? "#4CAF50" :
+        latest.type === "error" ? "#f44336" :
+        latest.type === "info" ? "#2196F3" :
+        "#ffc107";
 
       notifBar.style.display = "block";
 
-      // إخفاء بعد 8 ثوانٍ أو بالنقر
       setTimeout(() => notifBar.style.display = "none", 8000);
       notifBar.onclick = () => notifBar.style.display = "none";
     }
