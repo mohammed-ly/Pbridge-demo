@@ -1,17 +1,23 @@
-<!-- ✅ الكود المحدث لـ submit-request.html -->
-<!-- يحفظ البريد وحالة الطلب لتظهر لاحقًا في لوحات المستخدم والمؤسس -->
-<!-- نسخة جاهزة للنسخ الكامل -->
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Submit Request | PBridge</title>
-  <link rel="stylesheet" href="style/request.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style/submit-request.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
 </head>
 <body>
+  <script>
+    const user = JSON.parse(localStorage.getItem("pbridgeUser"));
+    if (!user) window.location.href = "login.html";
+
+    const settings = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
+    if (settings.theme === "dark") document.body.className = "dark";
+    document.documentElement.lang = settings.language || "en";
+    document.documentElement.dir = settings.language === "ar" ? "rtl" : "ltr";
+  </script>
+
   <nav>
     <div class="logo">
       <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="36" />
@@ -24,35 +30,37 @@
   </nav>
 
   <main>
-    <div class="form-box">
-      <h2 data-en="Submit New Request" data-ar="إرسال طلب جديد">Submit New Request</h2>
-      <form id="requestForm">
-        <label data-en="Client Name" data-ar="اسم العميل">Client Name</label>
-        <input type="text" id="clientName" required />
+    <h1 data-en="Submit New Request" data-ar="إرسال طلب جديد">Submit New Request</h1>
 
-        <label data-en="Country" data-ar="البلد">Country</label>
-        <input type="text" id="country" required />
+    <form id="requestForm">
+      <label>
+        <span data-en="Client Name" data-ar="اسم العميل">Client Name</span>
+        <input type="text" name="client" required />
+      </label>
 
-        <label data-en="Product Type" data-ar="نوع المنتج">Product Type</label>
-        <input type="text" id="productType" required />
+      <label>
+        <span data-en="Country" data-ar="البلد">Country</span>
+        <input type="text" name="country" required />
+      </label>
 
-        <label data-en="Total Value (Pi)" data-ar="القيمة الإجمالية (باي)">Total Value (Pi)</label>
-        <input type="number" id="totalValue" required />
+      <label>
+        <span data-en="Product" data-ar="المنتج">Product</span>
+        <input type="text" name="product" required />
+      </label>
 
-        <p id="commissionInfo"></p>
-        <p id="balanceWarning" style="color: red; display: none;" data-en="Insufficient balance to submit request." data-ar="الرصيد غير كافٍ لإرسال الطلب.">Insufficient balance to submit request.</p>
+      <label>
+        <span data-en="Total (in Pi)" data-ar="الإجمالي (بالـ Pi)">Total (in Pi)</span>
+        <input type="number" name="total" step="0.01" required />
+      </label>
 
-        <button type="submit" id="submitBtn" data-en="Submit" data-ar="إرسال">Submit</button>
-      </form>
-    </div>
+      <button type="submit" data-en="Submit Request" data-ar="إرسال الطلب">Submit Request</button>
+    </form>
   </main>
 
   <script>
-    let lang = "en";
-    const commissionRate = 0.03;
-    let balance = 10.0;
-
+    let lang = JSON.parse(localStorage.getItem("pbridgeSettings"))?.language || "en";
     const toggleBtn = document.getElementById("lang-toggle");
+
     toggleBtn.onclick = () => {
       lang = lang === "en" ? "ar" : "en";
       document.documentElement.lang = lang;
@@ -61,50 +69,35 @@
       document.querySelectorAll("[data-en]").forEach(el => {
         el.textContent = el.getAttribute(`data-${lang}`);
       });
+
+      const s = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
+      s.language = lang;
+      localStorage.setItem("pbridgeSettings", JSON.stringify(s));
     };
+
+    document.querySelectorAll("[data-en]").forEach(el => {
+      el.textContent = el.getAttribute(`data-${lang}`);
+    });
 
     const form = document.getElementById("requestForm");
-    const totalValue = document.getElementById("totalValue");
-    const submitBtn = document.getElementById("submitBtn");
-    const commissionInfo = document.getElementById("commissionInfo");
-    const balanceWarning = document.getElementById("balanceWarning");
-
-    totalValue.oninput = () => {
-      const value = parseFloat(totalValue.value);
-      const commission = value * commissionRate;
-      commissionInfo.innerText = lang === "ar"
-        ? `العمولة المطلوبة: ${commission.toFixed(2)} باي (3%)`
-        : `Required commission: ${commission.toFixed(2)} Pi (3%)`;
-
-      if (balance < commission) {
-        submitBtn.disabled = true;
-        balanceWarning.style.display = "block";
-      } else {
-        submitBtn.disabled = false;
-        balanceWarning.style.display = "none";
-      }
-    };
 
     form.onsubmit = e => {
       e.preventDefault();
+      const req = {
+        client: form.client.value,
+        country: form.country.value,
+        product: form.product.value,
+        total: form.total.value,
+        status: "pending",
+        email: user.email
+      };
 
-      const client = document.getElementById("clientName").value.trim();
-      const country = document.getElementById("country").value.trim();
-      const product = document.getElementById("productType").value.trim();
-      const total = parseFloat(document.getElementById("totalValue").value);
+      const all = JSON.parse(localStorage.getItem("pbridgeRequests")) || [];
+      all.push(req);
+      localStorage.setItem("pbridgeRequests", JSON.stringify(all));
 
-      const currentUser = JSON.parse(localStorage.getItem("pbridgeUser"));
-      const email = currentUser?.email || "unknown@example.com";
-
-      const newRequest = { client, country, product, total, email, status: "pending" };
-
-      const existing = JSON.parse(localStorage.getItem("pbridgeRequests")) || [];
-      existing.push(newRequest);
-      localStorage.setItem("pbridgeRequests", JSON.stringify(existing));
-
-      alert(lang === "ar" ? "تم إرسال الطلب بنجاح!" : "Request submitted successfully!");
+      alert(lang === "ar" ? "تم إرسال الطلب بنجاح" : "Request submitted successfully");
       form.reset();
-      commissionInfo.innerText = "";
     };
   </script>
 </body>
