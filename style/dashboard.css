@@ -8,51 +8,74 @@ body {
   color: #333;
 }
 
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  background-color: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
 main {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  padding: 80px 20px;
+  padding: 60px 20px;
 }
 
 .container {
   background-color: rgba(255, 255, 255, 0.96);
   padding: 40px 30px;
-  border-radius: 10px;
-  max-width: 500px;
+  max-width: 600px;
   width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   text-align: center;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-h1 {
-  font-size: 2.2em;
-  margin-bottom: 10px;
+.container h1 {
+  margin-bottom: 15px;
 }
 
-p {
+.container p {
   font-size: 1.1em;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
-.actions {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.btn {
+.actions .btn {
+  display: block;
   background-color: #6f42c1;
   color: white;
-  padding: 12px;
-  text-decoration: none;
-  border-radius: 8px;
+  padding: 12px 20px;
+  margin: 10px auto;
   font-weight: bold;
   font-size: 1em;
-  transition: 0.3s;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  max-width: 280px;
 }
 
-.btn:hover {
+.actions .btn:hover {
   background-color: #542d9d;
+}
+
+#notificationBar {
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  font-family: 'Inter', 'Cairo', sans-serif;
 }
