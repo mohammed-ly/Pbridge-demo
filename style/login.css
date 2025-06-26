@@ -4,9 +4,9 @@ body {
   background-size: cover;
   margin: 0;
   padding: 0;
+  min-height: 100vh;
   direction: ltr;
   color: #333;
-  min-height: 100vh;
 }
 
 nav {
