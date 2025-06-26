@@ -1,16 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
+  <title>About PBridge</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>About | PBridge</title>
   <link rel="stylesheet" href="style/about.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
 </head>
 <body>
+  <script>
+    const user = JSON.parse(localStorage.getItem("pbridgeUser"));
+    if (!user) window.location.href = "login.html";
+
+    const settings = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
+    if (settings.theme === "dark") document.body.className = "dark";
+    document.documentElement.lang = settings.language || "en";
+    document.documentElement.dir = settings.language === "ar" ? "rtl" : "ltr";
+  </script>
+
   <nav>
     <div class="logo">
-      <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="36"/>
+      <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="36" />
       <strong>PBridge</strong>
     </div>
     <div class="actions">
@@ -20,52 +30,34 @@
   </nav>
 
   <main>
-    <div class="about-box">
-      <h1 data-en="About PBridge" data-ar="حول PBridge">About PBridge</h1>
-      <div id="aboutText" class="content"></div>
-    </div>
+    <h1 data-en="About PBridge" data-ar="حول PBridge">About PBridge</h1>
+    <p data-en="PBridge is a decentralized logistics platform that enables users to submit and manage shipment requests using Pi cryptocurrency. It aims to simplify cross-border trade and empower agents and founders to collaborate transparently." 
+       data-ar="PBridge هي منصة لوجستية لامركزية تتيح للمستخدمين إرسال وإدارة طلبات الشحن باستخدام عملة Pi. تهدف إلى تبسيط التجارة عبر الحدود وتمكين الوكلاء والمؤسسين من التعاون بشفافية.">
+      PBridge is a decentralized logistics platform...
+    </p>
   </main>
 
   <script>
-    const langToggle = document.getElementById("lang-toggle");
-    let lang = "en";
+    let lang = JSON.parse(localStorage.getItem("pbridgeSettings"))?.language || "en";
+    const toggleBtn = document.getElementById("lang-toggle");
 
-    const aboutText = {
-      en: `
-        <p><strong>PBridge</strong> is a smart digital gateway that connects merchants, agents, and institutions through a unified and easy-to-use platform. It leverages the <strong>Pi Network</strong> as a decentralized, secure medium of exchange.</p>
-        <p>The platform empowers agents to submit requests, track their status, and communicate directly with the founder — all through a bilingual interface and role-based dashboards.</p>
-        <p>We believe the future of digital trade lies in simplicity, transparency, and trust. That's why PBridge was created — to bridge global commerce with tomorrow’s currency.</p>
-        <p>This project is developed by the <strong>Pi Network Community</strong>. For inquiries and support:</p>
-        <ul>
-          <li>Email: <a href="mailto:mohammed.bnyaala@gmail.com">mohammed.bnyaala@gmail.com</a></li>
-          <li>WhatsApp: <a href="https://wa.me/218910296455">+218910296455</a></li>
-        </ul>
-      `,
-      ar: `
-        <p><strong>PBridge</strong> هي بوابة رقمية ذكية تجمع بين التجار، الوكلاء، والمؤسسات من خلال منصة موحّدة وسهلة الاستخدام، تعتمد على شبكة <strong>Pi Network</strong> كوسيلة تبادل آمنة وغير مركزية.</p>
-        <p>تتيح المنصة لكل وكيل تقديم طلباته، تتبّع حالتها، والتواصل مع المؤسس بشكل مباشر، مع واجهات مرنة تدعم اللغتين ولوحة تحكم خاصة بكل دور.</p>
-        <p>نؤمن بأن الاقتصاد الرقمي القادم يجب أن يكون بسيطًا، شفافًا، ومبنيًا على الثقة. ومن هنا وُلدت PBridge — مشروع يربط الأطراف التجارية حول العالم بعملات المستقبل.</p>
-        <p>تم تطوير المشروع بواسطة <strong>مجتمع باي نيتورك</strong>. للتواصل والاستفسار:</p>
-        <ul>
-          <li>البريد الإلكتروني: <a href="mailto:mohammed.bnyaala@gmail.com">mohammed.bnyaala@gmail.com</a></li>
-          <li>واتساب: <a href="https://wa.me/218910296455">+218910296455</a></li>
-        </ul>
-      `
-    };
-
-    const contentBox = document.getElementById("aboutText");
-    contentBox.innerHTML = aboutText.en;
-
-    langToggle.onclick = () => {
+    toggleBtn.onclick = () => {
       lang = lang === "en" ? "ar" : "en";
       document.documentElement.lang = lang;
       document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-      langToggle.textContent = lang === "ar" ? "English" : "العربية";
+      toggleBtn.textContent = lang === "ar" ? "English" : "العربية";
       document.querySelectorAll("[data-en]").forEach(el => {
         el.textContent = el.getAttribute(`data-${lang}`);
       });
-      contentBox.innerHTML = aboutText[lang];
+
+      const s = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
+      s.language = lang;
+      localStorage.setItem("pbridgeSettings", JSON.stringify(s));
     };
+
+    document.querySelectorAll("[data-en]").forEach(el => {
+      el.textContent = el.getAttribute(`data-${lang}`);
+    });
   </script>
 </body>
 </html>
