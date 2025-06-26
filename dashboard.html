@@ -37,11 +37,12 @@
       <h1 id="welcome" data-en="Welcome," data-ar="مرحبًا،">Welcome,</h1>
       <p id="roleInfo" data-en="You are logged in as:" data-ar="أنت مسجل الدخول كـ:">You are logged in as:</p>
 
-      <div class="actions">
+      <div class="actions" id="buttonArea">
         <a href="submit-request.html" class="btn" data-en="Submit Request" data-ar="طلب شحنة">Submit Request</a>
         <a href="my-requests.html" class="btn" data-en="My Requests" data-ar="طلباتي">My Requests</a>
         <a href="notifications.html" class="btn" data-en="Notifications" data-ar="الإشعارات">Notifications</a>
         <a href="about.html" class="btn" data-en="About PBridge" data-ar="حول PBridge">About PBridge</a>
+        <!-- زر لوحة المؤسس سيضاف ديناميكياً إن كان الدور founder -->
       </div>
     </div>
   </main>
@@ -69,13 +70,14 @@
       roleInfo.innerHTML += " " + user.role;
     }
 
+    // تسجيل الخروج
     document.getElementById("logoutBtn").onclick = () => {
       localStorage.removeItem("loggedIn");
       localStorage.removeItem("pbridgeUser");
       window.location.href = "login.html";
     };
 
-    // إشعار مباشر للمستخدم الحالي
+    // إشعار مباشر
     const notifBar = document.getElementById("notificationBar");
     const allNotifs = JSON.parse(localStorage.getItem("pbridgeNotifications")) || [];
     const myNotifs = allNotifs.filter(n => n.email === user?.email);
@@ -91,9 +93,19 @@
         "#ffc107";
 
       notifBar.style.display = "block";
-
       setTimeout(() => notifBar.style.display = "none", 8000);
       notifBar.onclick = () => notifBar.style.display = "none";
+    }
+
+    // إضافة زر لوحة المؤسس إن كان المستخدم Founder
+    if (user?.role?.toLowerCase() === "founder") {
+      const founderBtn = document.createElement("a");
+      founderBtn.href = "admin-dashboard.html";
+      founderBtn.className = "btn";
+      founderBtn.setAttribute("data-en", "Founder Panel");
+      founderBtn.setAttribute("data-ar", "لوحة المؤسس");
+      founderBtn.textContent = lang === "ar" ? "لوحة المؤسس" : "Founder Panel";
+      document.getElementById("buttonArea").appendChild(founderBtn);
     }
   </script>
 </body>
