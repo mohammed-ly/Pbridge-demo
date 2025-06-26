@@ -27,6 +27,7 @@
       <div class="actions">
         <a href="submit-request.html" class="btn" data-en="Submit Request" data-ar="طلب شحنة">Submit Request</a>
         <a href="my-requests.html" class="btn" data-en="My Requests" data-ar="طلباتي">My Requests</a>
+        <a href="about.html" class="btn" data-en="About PBridge" data-ar="حول PBridge">About PBridge</a>
       </div>
     </div>
   </main>
@@ -55,8 +56,8 @@
     }
 
     document.getElementById("logoutBtn").onclick = () => {
-      localStorage.removeItem("loggedIn");
       localStorage.removeItem("pbridgeUser");
+      localStorage.removeItem("loggedIn");
       window.location.href = "login.html";
     };
   </script>
