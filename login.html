@@ -6,6 +6,7 @@
   <title>Login | PBridge</title>
   <link rel="stylesheet" href="style/login.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
   <nav>
@@ -21,24 +22,33 @@
       <h2 data-en="Login to your account" data-ar="تسجيل الدخول إلى حسابك">Login to your account</h2>
       <form>
         <label data-en="Email address" data-ar="البريد الإلكتروني">Email address</label>
-        <input type="email" placeholder="you@example.com" required />
+        <div class="input-icon">
+          <i class="fa fa-envelope"></i>
+          <input type="email" placeholder="you@example.com" required />
+        </div>
 
         <label data-en="Password" data-ar="كلمة المرور">Password</label>
-        <input type="password" placeholder="••••••••" required />
+        <div class="input-icon">
+          <i class="fa fa-lock"></i>
+          <input type="password" placeholder="••••••••" required />
+        </div>
 
         <label data-en="Login as" data-ar="تسجيل الدخول كـ">Login as</label>
-        <select>
-          <option value="agent" data-en="Agent" data-ar="وكيل">Agent</option>
-          <option value="trader" data-en="Trader" data-ar="تاجر">Trader</option>
-          <option value="company" data-en="Company" data-ar="شركة">Company</option>
-        </select>
+        <div class="input-icon">
+          <i class="fa fa-user-tag"></i>
+          <select>
+            <option value="agent" data-en="Agent" data-ar="وكيل">Agent</option>
+            <option value="trader" data-en="Trader" data-ar="تاجر">Trader</option>
+            <option value="company" data-en="Company" data-ar="شركة">Company</option>
+          </select>
+        </div>
 
         <button type="submit" data-en="Log In" data-ar="تسجيل الدخول">Log In</button>
       </form>
 
       <p class="helper">
         <a href="#" data-en="Forgot password?" data-ar="هل نسيت كلمة المرور؟">Forgot password?</a> • 
-        <a href="#" data-en="Create new account" data-ar="إنشاء حساب جديد">Create new account</a>
+        <a href="signup.html" data-en="Create new account" data-ar="إنشاء حساب جديد">Create new account</a>
       </p>
     </div>
   </main>
