@@ -11,8 +11,101 @@
   <script>
     const user = JSON.parse(localStorage.getItem("pbridgeUser"));
     if (!user) window.location.href = "login.html";
+
+    const settings = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
+    if (settings.theme === "dark") document.body.className = "dark";
+    document.documentElement.lang = settings.language || "en";
+    document.documentElement.dir = settings.language === "ar" ? "rtl" : "ltr";
   </script>
 
-  <!-- ... باقي الصفحة بدون تغيير ... -->
+  <nav>
+    <div class="logo">
+      <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="36" />
+      <strong>PBridge</strong>
+    </div>
+    <div class="actions">
+      <button id="lang-toggle">العربية</button>
+      <a href="dashboard.html" class="button" data-en="Back" data-ar="الرجوع">Back</a>
+    </div>
+  </nav>
+
+  <main>
+    <h1 data-en="My Profile" data-ar="ملفي الشخصي">My Profile</h1>
+
+    <form id="profileForm">
+      <label>
+        <span data-en="Name" data-ar="الاسم">Name</span>
+        <input type="text" name="name" required />
+      </label>
+
+      <label>
+        <span data-en="Email" data-ar="البريد الإلكتروني">Email</span>
+        <input type="email" name="email" readonly />
+      </label>
+
+      <label>
+        <span data-en="Role" data-ar="الدور">Role</span>
+        <input type="text" name="role" readonly />
+      </label>
+
+      <label>
+        <span data-en="Password" data-ar="كلمة المرور">Password</span>
+        <input type="password" name="password" required />
+      </label>
+
+      <button type="submit" data-en="Save Changes" data-ar="حفظ التعديلات">Save Changes</button>
+    </form>
+
+    <button id="deleteBtn" style="margin-top: 20px;" data-en="Delete Account" data-ar="حذف الحساب">Delete Account</button>
+  </main>
+
+  <script>
+    let lang = JSON.parse(localStorage.getItem("pbridgeSettings"))?.language || "en";
+    const toggleBtn = document.getElementById("lang-toggle");
+
+    toggleBtn.onclick = () => {
+      lang = lang === "en" ? "ar" : "en";
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      toggleBtn.textContent = lang === "ar" ? "English" : "العربية";
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+
+      const s = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
+      s.language = lang;
+      localStorage.setItem("pbridgeSettings", JSON.stringify(s));
+    };
+
+    document.querySelectorAll("[data-en]").forEach(el => {
+      el.textContent = el.getAttribute(`data-${lang}`);
+    });
+
+    const form = document.getElementById("profileForm");
+    form.name.value = user.name;
+    form.email.value = user.email;
+    form.role.value = user.role;
+    form.password.value = user.password;
+
+    form.onsubmit = e => {
+      e.preventDefault();
+      const updated = {
+        ...user,
+        name: form.name.value,
+        password: form.password.value
+      };
+      localStorage.setItem("pbridgeUser", JSON.stringify(updated));
+      alert(lang === "ar" ? "تم حفظ التعديلات بنجاح" : "Changes saved successfully");
+    };
+
+    document.getElementById("deleteBtn").onclick = () => {
+      const confirmMsg = lang === "ar" ? "هل أنت متأكد من حذف الحساب؟" : "Are you sure you want to delete your account?";
+      if (confirm(confirmMsg)) {
+        localStorage.removeItem("pbridgeUser");
+        localStorage.removeItem("loggedIn");
+        window.location.href = "signup.html";
+      }
+    };
+  </script>
 </body>
 </html>
