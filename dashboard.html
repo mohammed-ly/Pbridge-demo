@@ -26,26 +26,25 @@
 
       <div class="actions">
         <a href="submit-request.html" class="btn" data-en="Submit Request" data-ar="طلب شحنة">Submit Request</a>
-        <a href="#" class="btn" data-en="View Requests" data-ar="عرض الطلبات">View Requests</a>
+        <a href="my-requests.html" class="btn" data-en="My Requests" data-ar="طلباتي">My Requests</a>
       </div>
     </div>
   </main>
 
   <script>
-    // اللغة
     let lang = "en";
     const toggleBtn = document.getElementById("lang-toggle");
+
     toggleBtn.onclick = () => {
-      lang = (lang === "en") ? "ar" : "en";
+      lang = lang === "en" ? "ar" : "en";
       document.documentElement.lang = lang;
-      document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
-      toggleBtn.textContent = (lang === "ar") ? "English" : "العربية";
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      toggleBtn.textContent = lang === "ar" ? "English" : "العربية";
       document.querySelectorAll("[data-en]").forEach(el => {
         el.textContent = el.getAttribute(`data-${lang}`);
       });
     };
 
-    // عرض اسم المستخدم والدور
     const user = JSON.parse(localStorage.getItem("pbridgeUser"));
     const welcome = document.getElementById("welcome");
     const roleInfo = document.getElementById("roleInfo");
@@ -55,7 +54,6 @@
       roleInfo.innerHTML += " " + user.role;
     }
 
-    // تسجيل الخروج
     document.getElementById("logoutBtn").onclick = () => {
       localStorage.removeItem("loggedIn");
       window.location.href = "login.html";
