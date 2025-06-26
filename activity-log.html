@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Activity Log | PBridge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style/activity-log.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <script>
+    const user = JSON.parse(localStorage.getItem("pbridgeUser"));
+    if (!user || user.role !== "founder") window.location.href = "login.html";
+
+    const settings = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
+    if (settings.theme === "dark") document.body.className = "dark";
+    document.documentElement.lang = settings.language || "en";
+    document.documentElement.dir = settings.language === "ar" ? "rtl" : "ltr";
+  </script>
+
+  <nav>
+    <div class="logo">
+      <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="34" />
+      <strong>PBridge – Activity Log</strong>
+    </div>
+    <div class="actions">
+      <button id="lang-toggle">العربية</button>
+      <a href="founder-dashboard.html" class="button" data-en="Back to Dashboard" data-ar="الرجوع للوحة المؤسس">Back</a>
+    </div>
+  </nav>
+
+  <main>
+    <h1 data-en="Activity Log" data-ar="سجل النشاطات">Activity Log</h1>
+    <div id="log-container" class="container"></div>
+  </main>
+
+  <script>
+    let lang = settings.language || "en";
+    const toggleBtn = document.getElementById("lang-toggle");
+
+    toggleBtn.onclick = () => {
+      lang = lang === "en" ? "ar" : "en";
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      toggleBtn.textContent = lang === "ar" ? "English" : "العربية";
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+      renderLog();
+    };
+
+    document.querySelectorAll("[data-en]").forEach(el => {
+      el.textContent = el.getAttribute(`data-${lang}`);
+    });
+
+    const container = document.getElementById("log-container");
+    const logs = JSON.parse(localStorage.getItem("pbridgeActivity")) || [];
+
+    function renderLog() {
+      container.innerHTML = "";
+      if (logs.length === 0) {
+        container.innerHTML = `<p>${lang === "ar" ? "لا توجد نشاطات مسجلة" : "No activity logged."}</p>`;
+        return;
+      }
+
+      logs.slice().reverse().forEach(log => {
+        const box = document.createElement("div");
+        box.className = "log-entry";
+
+        const time = new Date(log.time).toLocaleString(lang === "ar" ? "ar-LY" : "en-US");
+
+        box.innerHTML = `
+          <p><strong>${lang === "ar" ? "الفاعل" : "Actor"}:</strong> ${log.actor} (${log.role})</p>
+          <p><strong>${lang === "ar" ? "الإجراء" : "Action"}:</strong> ${translateAction(log.action)}</p>
+          <p><strong>${lang === "ar" ? "المرجع" : "Reference"}:</strong> ${log.reference}</p>
+          <p><strong>${lang === "ar" ? "الوقت" : "Time"}:</strong> ${time}</p>
+        `;
+        container.appendChild(box);
+      });
+    }
+
+    function translateAction(action) {
+      const map = {
+        "submitted": lang === "ar" ? "تم إرسال طلب" : "Submitted Request",
+        "approved": lang === "ar" ? "وافق على الطلب" : "Approved Request",
+        "rejected": lang === "ar" ? "رفض الطلب" : "Rejected Request"
+      };
+      return map[action] || action;
+    }
+
+    renderLog();
+  </script>
+</body>
+</html>
