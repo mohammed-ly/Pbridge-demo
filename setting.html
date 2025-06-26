@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Settings | PBridge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style/settings.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <script>
+    const user = JSON.parse(localStorage.getItem("pbridgeUser"));
+    if (!user) window.location.href = "login.html";
+  </script>
+
+  <nav>
+    <div class="logo">
+      <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="36" />
+      <strong>PBridge</strong>
+    </div>
+    <div class="actions">
+      <a href="dashboard.html" class="button" data-en="Back" data-ar="الرجوع">Back</a>
+    </div>
+  </nav>
+
+  <main>
+    <h1 data-en="Settings" data-ar="الإعدادات">Settings</h1>
+
+    <form id="settingsForm">
+      <label>
+        <span data-en="Preferred Language" data-ar="اللغة المفضلة">Preferred Language</span>
+        <select name="language">
+          <option value="en">English</option>
+          <option value="ar">العربية</option>
+        </select>
+      </label>
+
+      <label>
+        <span data-en="Theme" data-ar="السمة">Theme</span>
+        <select name="theme">
+          <option value="light">☀️ Light</option>
+          <option value="dark">🌙 Dark</option>
+        </select>
+      </label>
+
+      <label>
+        <span data-en="Sound on Notification" data-ar="صوت الإشعار">Sound on Notification</span>
+        <select name="sound">
+          <option value="on" data-en="Enabled" data-ar="مفعل">Enabled</option>
+          <option value="off" data-en="Muted" data-ar="صامت">Muted</option>
+        </select>
+      </label>
+
+      <button type="submit" data-en="Save Settings" data-ar="حفظ الإعدادات">Save Settings</button>
+    </form>
+  </main>
+
+  <script>
+    const form = document.getElementById("settingsForm");
+    const langToggle = document.querySelector("html").lang === "ar" ? "ar" : "en";
+    let lang = langToggle;
+
+    function applyLanguage() {
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+    }
+
+    function loadSettings() {
+      const settings = JSON.parse(localStorage.getItem("pbridgeSettings")) || {
+        language: "en",
+        theme: "light",
+        sound: "on"
+      };
+
+      form.language.value = settings.language;
+      form.theme.value = settings.theme;
+      form.sound.value = settings.sound;
+
+      lang = settings.language;
+      applyLanguage();
+      document.body.className = settings.theme;
+    }
+
+    form.onsubmit = e => {
+      e.preventDefault();
+      const settings = {
+        language: form.language.value,
+        theme: form.theme.value,
+        sound: form.sound.value
+      };
+      localStorage.setItem("pbridgeSettings", JSON.stringify(settings));
+      alert(lang === "ar" ? "تم حفظ الإعدادات بنجاح" : "Settings saved successfully");
+      loadSettings();
+    };
+
+    loadSettings();
+  </script>
+</body>
+</html>
