@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notifications | PBridge</title>
+  <link rel="stylesheet" href="style/notifications.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="36" />
+      <strong>PBridge</strong>
+    </div>
+    <div class="actions">
+      <button id="lang-toggle">العربية</button>
+      <a href="dashboard.html" class="button" data-en="Back" data-ar="الرجوع">Back</a>
+    </div>
+  </nav>
+
+  <main>
+    <h1 data-en="My Notifications" data-ar="إشعاراتي">My Notifications</h1>
+    <div id="notifications-container" class="container"></div>
+  </main>
+
+  <script>
+    let lang = "en";
+    const toggleBtn = document.getElementById("lang-toggle");
+
+    toggleBtn.onclick = () => {
+      lang = lang === "en" ? "ar" : "en";
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      toggleBtn.textContent = lang === "ar" ? "English" : "العربية";
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+      renderNotifications();
+    };
+
+    const currentUser = JSON.parse(localStorage.getItem("pbridgeUser"));
+    const allNotifs = JSON.parse(localStorage.getItem("pbridgeNotifications")) || [];
+    const myNotifs = allNotifs.filter(n => n.email === currentUser?.email);
+    const container = document.getElementById("notifications-container");
+
+    function renderNotifications() {
+      container.innerHTML = "";
+      if (myNotifs.length === 0) {
+        container.innerHTML = lang === "ar"
+          ? "<p>لا توجد إشعارات بعد.</p>"
+          : "<p>No notifications yet.</p>";
+        return;
+      }
+
+      [...myNotifs].reverse().forEach(n => {
+        const box = document.createElement("div");
+        box.className = "notif-box";
+
+        let color = "#ffc107"; // default yellow
+        if (n.type === "success") color = "#4CAF50";
+        else if (n.type === "error") color = "#f44336";
+        else if (n.type === "info") color = "#2196F3";
+
+        const time = new Date(n.time).toLocaleString(lang === "ar" ? "ar-EG" : "en-US");
+
+        box.innerHTML = `
+          <p style="color:${color}; font-weight: bold;">${n.message}</p>
+          <p style="font-size: 0.9em; color: #666;">${time}</p>
+        `;
+        container.appendChild(box);
+      });
+    }
+
+    renderNotifications();
+  </script>
+</body>
+</html>
