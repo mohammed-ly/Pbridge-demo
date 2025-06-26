@@ -14,19 +14,36 @@
       <strong>PBridge</strong>
     </div>
     <div class="actions">
-      <a href="login.html" class="button">Login</a>
-      <a href="signup.html" class="button">Sign Up</a>
+      <button id="lang-toggle">العربية</button>
+      <a href="login.html" class="button" data-en="Login" data-ar="تسجيل الدخول">Login</a>
+      <a href="signup.html" class="button" data-en="Sign Up" data-ar="إنشاء حساب">Sign Up</a>
     </div>
   </nav>
 
   <header>
-    <h1>Welcome to <span class="highlight">PBridge</span></h1>
-    <p>The trusted network to request and fulfill international trade using Pi Currency 🌍</p>
-    <a href="login.html" class="cta">Get Started</a>
+    <h1 id="main-title" data-en="Welcome to" data-ar="مرحبًا بك في">Welcome to <span class="highlight">PBridge</span></h1>
+    <p id="subtitle" data-en="The trusted network to request and fulfill international trade using Pi Currency 🌍" data-ar="شبكة موثوقة لتنفيذ الطلبات الدولية باستخدام عملة باي">The trusted network to request and fulfill international trade using Pi Currency 🌍</p>
+    <a href="login.html" class="cta" data-en="Get Started" data-ar="ابدأ الآن">Get Started</a>
   </header>
 
   <footer>
     <p>&copy; 2025 PBridge. All rights reserved.</p>
   </footer>
+
+  <script>
+    let lang = "en";
+    const toggleBtn = document.getElementById("lang-toggle");
+
+    toggleBtn.onclick = () => {
+      lang = (lang === "en") ? "ar" : "en";
+      document.documentElement.lang = lang;
+      document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
+      toggleBtn.textContent = (lang === "ar") ? "English" : "العربية";
+
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+    };
+  </script>
 </body>
 </html>
