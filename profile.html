@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile | PBridge</title>
+  <link rel="stylesheet" href="style/profile.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="36" />
+      <strong>PBridge</strong>
+    </div>
+    <div class="actions">
+      <button id="lang-toggle">العربية</button>
+      <a href="dashboard.html" class="button" data-en="Back" data-ar="الرجوع">Back</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="form-box">
+      <h2 data-en="My Profile" data-ar="ملفي الشخصي">My Profile</h2>
+      <form id="profileForm">
+        <label data-en="Full Name" data-ar="الاسم الكامل">Full Name</label>
+        <input type="text" id="name" required />
+
+        <label data-en="Email (not editable)" data-ar="البريد الإلكتروني (غير قابل للتعديل)">Email (not editable)</label>
+        <input type="email" id="email" disabled />
+
+        <label data-en="Role" data-ar="الدور">Role</label>
+        <input type="text" id="role" disabled />
+
+        <label data-en="Password" data-ar="كلمة المرور">Password</label>
+        <input type="password" id="password" required />
+
+        <div class="actions">
+          <button type="submit" data-en="Save Changes" data-ar="حفظ التغييرات">Save Changes</button>
+          <button type="button" id="deleteBtn" data-en="Delete Account" data-ar="حذف الحساب" style="background-color:#f44336;">Delete Account</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    let lang = "en";
+    const toggleBtn = document.getElementById("lang-toggle");
+
+    toggleBtn.onclick = () => {
+      lang = lang === "en" ? "ar" : "en";
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      toggleBtn.textContent = lang === "ar" ? "English" : "العربية";
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+    };
+
+    const user = JSON.parse(localStorage.getItem("pbridgeUser")) || {};
+    document.getElementById("name").value = user.name || "";
+    document.getElementById("email").value = user.email || "";
+    document.getElementById("role").value = user.role || "";
+    document.getElementById("password").value = user.password || "";
+
+    document.getElementById("profileForm").onsubmit = e => {
+      e.preventDefault();
+      user.name = document.getElementById("name").value.trim();
+      user.password = document.getElementById("password").value;
+      localStorage.setItem("pbridgeUser", JSON.stringify(user));
+      alert(lang === "ar" ? "تم حفظ التغييرات!" : "Changes saved!");
+    };
+
+    document.getElementById("deleteBtn").onclick = () => {
+      const confirmText = lang === "ar"
+        ? "هل أنت متأكد من حذف الحساب؟ هذا الإجراء لا يمكن التراجع عنه."
+        : "Are you sure you want to delete your account? This action cannot be undone.";
+      if (confirm(confirmText)) {
+        localStorage.removeItem("pbridgeUser");
+        localStorage.removeItem("loggedIn");
+        alert(lang === "ar" ? "تم حذف الحساب." : "Account deleted.");
+        window.location.href = "signup.html";
+      }
+    };
+  </script>
+</body>
+</html>
