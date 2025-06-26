@@ -11,6 +11,11 @@
   <script>
     const user = JSON.parse(localStorage.getItem("pbridgeUser"));
     if (!user) window.location.href = "login.html";
+
+    const settings = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
+    if (settings.theme === "dark") document.body.className = "dark";
+    document.documentElement.lang = settings.language || "en";
+    document.documentElement.dir = settings.language === "ar" ? "rtl" : "ltr";
   </script>
 
   <nav>
@@ -57,12 +62,9 @@
 
   <script>
     const form = document.getElementById("settingsForm");
-    const langToggle = document.querySelector("html").lang === "ar" ? "ar" : "en";
-    let lang = langToggle;
+    let lang = document.documentElement.lang || "en";
 
     function applyLanguage() {
-      document.documentElement.lang = lang;
-      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
       document.querySelectorAll("[data-en]").forEach(el => {
         el.textContent = el.getAttribute(`data-${lang}`);
       });
