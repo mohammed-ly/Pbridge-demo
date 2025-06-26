@@ -3,102 +3,93 @@
 <head>
   <meta charset="UTF-8" />
   <title>Settings | PBridge</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="style/settings.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet"/>
 </head>
 <body>
   <script>
     const user = JSON.parse(localStorage.getItem("pbridgeUser"));
     if (!user) window.location.href = "login.html";
 
-    const settings = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
-    if (settings.theme === "dark") document.body.className = "dark";
-    document.documentElement.lang = settings.language || "en";
+    const settings = JSON.parse(localStorage.getItem("pbridgeSettings")) || { theme: "light", language: "en" };
+    if (settings.theme === "dark") document.body.classList.add("dark");
+    document.documentElement.lang = settings.language;
     document.documentElement.dir = settings.language === "ar" ? "rtl" : "ltr";
   </script>
-
-  <nav>
-    <div class="logo">
-      <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="36" />
-      <strong>PBridge</strong>
-    </div>
-    <div class="actions">
-      <a href="dashboard.html" class="button" data-en="Back" data-ar="الرجوع">Back</a>
-    </div>
-  </nav>
 
   <main>
     <h1 data-en="Settings" data-ar="الإعدادات">Settings</h1>
 
     <form id="settingsForm">
       <label>
-        <span data-en="Preferred Language" data-ar="اللغة المفضلة">Preferred Language</span>
+        <span data-en="Full Name" data-ar="الاسم الكامل">Full Name</span>
+        <input type="text" name="name" required />
+      </label>
+
+      <label>
+        <span data-en="Email" data-ar="البريد الإلكتروني">Email</span>
+        <input type="email" name="email" required />
+      </label>
+
+      <label>
+        <span data-en="User Role" data-ar="الدور">Role</span>
+        <input type="text" name="role" disabled />
+      </label>
+
+      <label>
+        <span data-en="Language" data-ar="اللغة">Language</span>
         <select name="language">
-          <option value="en">English</option>
-          <option value="ar">العربية</option>
+          <option value="en" data-en="English" data-ar="الإنجليزية">English</option>
+          <option value="ar" data-en="Arabic" data-ar="العربية">العربية</option>
         </select>
       </label>
 
       <label>
-        <span data-en="Theme" data-ar="السمة">Theme</span>
+        <span data-en="Theme" data-ar="المظهر">Theme</span>
         <select name="theme">
-          <option value="light">☀️ Light</option>
-          <option value="dark">🌙 Dark</option>
-        </select>
-      </label>
-
-      <label>
-        <span data-en="Sound on Notification" data-ar="صوت الإشعار">Sound on Notification</span>
-        <select name="sound">
-          <option value="on" data-en="Enabled" data-ar="مفعل">Enabled</option>
-          <option value="off" data-en="Muted" data-ar="صامت">Muted</option>
+          <option value="light" data-en="Light" data-ar="نهاري">Light</option>
+          <option value="dark" data-en="Dark" data-ar="داكن">Dark</option>
         </select>
       </label>
 
       <button type="submit" data-en="Save Settings" data-ar="حفظ الإعدادات">Save Settings</button>
+      <button type="button" id="logoutBtn" data-en="Logout" data-ar="تسجيل الخروج">Logout</button>
     </form>
   </main>
 
   <script>
+    let lang = settings.language;
+    document.querySelectorAll("[data-en]").forEach(el => {
+      el.textContent = el.getAttribute(`data-${lang}`);
+    });
+
     const form = document.getElementById("settingsForm");
-    let lang = document.documentElement.lang || "en";
-
-    function applyLanguage() {
-      document.querySelectorAll("[data-en]").forEach(el => {
-        el.textContent = el.getAttribute(`data-${lang}`);
-      });
-    }
-
-    function loadSettings() {
-      const settings = JSON.parse(localStorage.getItem("pbridgeSettings")) || {
-        language: "en",
-        theme: "light",
-        sound: "on"
-      };
-
-      form.language.value = settings.language;
-      form.theme.value = settings.theme;
-      form.sound.value = settings.sound;
-
-      lang = settings.language;
-      applyLanguage();
-      document.body.className = settings.theme;
-    }
+    form.name.value = user.name;
+    form.email.value = user.email;
+    form.role.value = user.role;
+    form.language.value = lang;
+    form.theme.value = settings.theme;
 
     form.onsubmit = e => {
       e.preventDefault();
-      const settings = {
+      localStorage.setItem("pbridgeUser", JSON.stringify({
+        name: form.name.value,
+        email: form.email.value,
+        role: user.role
+      }));
+      localStorage.setItem("pbridgeSettings", JSON.stringify({
         language: form.language.value,
-        theme: form.theme.value,
-        sound: form.sound.value
-      };
-      localStorage.setItem("pbridgeSettings", JSON.stringify(settings));
-      alert(lang === "ar" ? "تم حفظ الإعدادات بنجاح" : "Settings saved successfully");
-      loadSettings();
+        theme: form.theme.value
+      }));
+      alert(lang === "ar" ? "تم حفظ الإعدادات ✅" : "Settings saved ✅");
+      location.reload();
     };
 
-    loadSettings();
+    document.getElementById("logoutBtn").onclick = () => {
+      localStorage.removeItem("pbridgeUser");
+      window.location.href = "login.html";
+    };
   </script>
 </body>
 </html>
