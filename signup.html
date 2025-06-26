@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up | PBridge</title>
+  <link rel="stylesheet" href="style/signup.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <img src="logo/logo-pbridge-transparent.png" alt="PBridge Logo" height="36" />
+      <strong>PBridge</strong>
+    </div>
+    <button id="lang-toggle">العربية</button>
+  </nav>
+
+  <main>
+    <div class="signup-box">
+      <h2 data-en="Create a new account" data-ar="إنشاء حساب جديد">Create a new account</h2>
+      <form>
+        <label data-en="Full Name" data-ar="الاسم الكامل">Full Name</label>
+        <input type="text" placeholder="Your name" required />
+
+        <label data-en="Email address" data-ar="البريد الإلكتروني">Email address</label>
+        <input type="email" placeholder="you@example.com" required />
+
+        <label data-en="Password" data-ar="كلمة المرور">Password</label>
+        <input type="password" placeholder="••••••••" required />
+
+        <label data-en="Confirm Password" data-ar="تأكيد كلمة المرور">Confirm Password</label>
+        <input type="password" placeholder="••••••••" required />
+
+        <label data-en="Register as" data-ar="تسجيل كـ">Register as</label>
+        <select>
+          <option value="agent" data-en="Agent" data-ar="وكيل">Agent</option>
+          <option value="trader" data-en="Trader" data-ar="تاجر">Trader</option>
+          <option value="company" data-en="Company" data-ar="شركة">Company</option>
+        </select>
+
+        <button type="submit" data-en="Sign Up" data-ar="إنشاء الحساب">Sign Up</button>
+      </form>
+
+      <p class="helper">
+        <a href="login.html" data-en="Already have an account? Login" data-ar="هل لديك حساب؟ سجل الدخول">Already have an account? Login</a>
+      </p>
+    </div>
+  </main>
+
+  <script>
+    const toggleBtn = document.getElementById("lang-toggle");
+    let lang = "en";
+
+    toggleBtn.onclick = () => {
+      lang = (lang === "en") ? "ar" : "en";
+      document.documentElement.lang = lang;
+      document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
+      toggleBtn.textContent = (lang === "en") ? "العربية" : "English";
+
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+
+      document.querySelectorAll("option").forEach(option => {
+        option.textContent = option.getAttribute(`data-${lang}`);
+      });
+    };
+  </script>
+</body>
+</html>
