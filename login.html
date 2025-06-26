@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | PBridge</title>
+  <link rel="stylesheet" href="style/main.css" />
+</head>
+<body>
+  <header>
+    <h1>Login to PBridge</h1>
+    <p id="role-label">Authenticating...</p>
+  </header>
+
+  <main>
+    <button id="login-btn">🔐 Sign in with Pi</button>
+  </main>
+
+  <script defer src="https://sdk.minepi.com/pi-sdk.js"></script>
+  <script>
+    const Pi = window.Pi;
+    Pi.init({ version: "2.0", sandbox: true });
+
+    const role = new URLSearchParams(window.location.search).get('role') || 'user';
+    const label = document.getElementById("role-label");
+    label.textContent = "Logging in as: " + role.toUpperCase();
+
+    document.getElementById("login-btn").onclick = async () => {
+      try {
+        const scopes = ["username", "payments"];
+        const result = await Pi.authenticate(scopes);
+        const username = result.user.username;
+        // بعد تسجيل الدخول، نوجه المستخدم إلى لوحته حسب نوعه
+        window.location.href = `dashboard/${role}.html?user=${username}`;
+      } catch (err) {
+        alert("Login failed: " + err.message);
+      }
+    };
+  </script>
+</body>
+</html>
