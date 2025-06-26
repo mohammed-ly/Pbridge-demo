@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About | PBridge</title>
+  <link rel="stylesheet" href="style/about.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="36"/>
+      <strong>PBridge</strong>
+    </div>
+    <div class="actions">
+      <button id="lang-toggle">العربية</button>
+      <a href="dashboard.html" class="button" data-en="Back" data-ar="الرجوع">Back</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="about-box">
+      <h1 data-en="About PBridge" data-ar="حول PBridge">About PBridge</h1>
+      <div id="aboutText" class="content"></div>
+    </div>
+  </main>
+
+  <script>
+    const langToggle = document.getElementById("lang-toggle");
+    let lang = "en";
+
+    const aboutText = {
+      en: `
+        <p><strong>PBridge</strong> is a smart digital gateway that connects merchants, agents, and institutions through a unified and easy-to-use platform. It leverages the <strong>Pi Network</strong> as a decentralized, secure medium of exchange.</p>
+        <p>The platform empowers agents to submit requests, track their status, and communicate directly with the founder — all through a bilingual interface and role-based dashboards.</p>
+        <p>We believe the future of digital trade lies in simplicity, transparency, and trust. That's why PBridge was created — to bridge global commerce with tomorrow’s currency.</p>
+        <p>This project is developed by the <strong>Pi Network Community</strong>. For inquiries and support:</p>
+        <ul>
+          <li>Email: <a href="mailto:mohammed.bnyaala@gmail.com">mohammed.bnyaala@gmail.com</a></li>
+          <li>WhatsApp: <a href="https://wa.me/218910296455">+218910296455</a></li>
+        </ul>
+      `,
+      ar: `
+        <p><strong>PBridge</strong> هي بوابة رقمية ذكية تجمع بين التجار، الوكلاء، والمؤسسات من خلال منصة موحّدة وسهلة الاستخدام، تعتمد على شبكة <strong>Pi Network</strong> كوسيلة تبادل آمنة وغير مركزية.</p>
+        <p>تتيح المنصة لكل وكيل تقديم طلباته، تتبّع حالتها، والتواصل مع المؤسس بشكل مباشر، مع واجهات مرنة تدعم اللغتين ولوحة تحكم خاصة بكل دور.</p>
+        <p>نؤمن بأن الاقتصاد الرقمي القادم يجب أن يكون بسيطًا، شفافًا، ومبنيًا على الثقة. ومن هنا وُلدت PBridge — مشروع يربط الأطراف التجارية حول العالم بعملات المستقبل.</p>
+        <p>تم تطوير المشروع بواسطة <strong>مجتمع باي نيتورك</strong>. للتواصل والاستفسار:</p>
+        <ul>
+          <li>البريد الإلكتروني: <a href="mailto:mohammed.bnyaala@gmail.com">mohammed.bnyaala@gmail.com</a></li>
+          <li>واتساب: <a href="https://wa.me/218910296455">+218910296455</a></li>
+        </ul>
+      `
+    };
+
+    const contentBox = document.getElementById("aboutText");
+    contentBox.innerHTML = aboutText.en;
+
+    langToggle.onclick = () => {
+      lang = lang === "en" ? "ar" : "en";
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      langToggle.textContent = lang === "ar" ? "English" : "العربية";
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+      contentBox.innerHTML = aboutText[lang];
+    };
+  </script>
+</body>
+</html>
