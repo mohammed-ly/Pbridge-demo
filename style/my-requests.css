@@ -1,0 +1,43 @@
+body {
+  font-family: 'Inter', 'Cairo', sans-serif;
+  background: url('../assets/bg-bridge-modern.jpg') no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  color: #333;
+}
+
+main {
+  padding: 60px 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2em;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.request-box {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+}
+
+.request-box p {
+  margin: 5px 0;
+  font-size: 1em;
+}
+
+.request-box span {
+  font-weight: bold;
+}
