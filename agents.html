@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Local Agents | PBridge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style/agents.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <script>
+    const settings = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
+    if (settings.theme === "dark") document.body.classList.add("dark");
+    document.documentElement.lang = settings.language || "en";
+    document.documentElement.dir = settings.language === "ar" ? "rtl" : "ltr";
+  </script>
+
+  <nav>
+    <div class="logo">
+      <img src="logo/logo-pbridge-transparent.png" height="36" />
+      <strong>PBridge – Agents</strong>
+    </div>
+    <div class="actions">
+      <button id="lang-toggle">العربية</button>
+      <a href="dashboard.html" class="button" data-en="Back to Dashboard" data-ar="الرجوع للوحة التحكم">Back</a>
+    </div>
+  </nav>
+
+  <main>
+    <h1 data-en="Local Agents" data-ar="الوكلاء المحليون">Local Agents</h1>
+    <div id="agents-list" class="container"></div>
+  </main>
+
+  <script>
+    let lang = settings.language || "en";
+    const toggleBtn = document.getElementById("lang-toggle");
+
+    toggleBtn.onclick = () => {
+      lang = lang === "en" ? "ar" : "en";
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      toggleBtn.textContent = lang === "ar" ? "English" : "العربية";
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+      renderAgents();
+    };
+
+    document.querySelectorAll("[data-en]").forEach(el => {
+      el.textContent = el.getAttribute(`data-${lang}`);
+    });
+
+    const agents = [
+      {
+        name: "أحمد المغربي",
+        city: "طرابلس",
+        experience: "3 سنوات",
+        phone: "092-1234567",
+        services: "استيراد إلكترونيات"
+      },
+      {
+        name: "سالم بوهديمة",
+        city: "بنغازي",
+        experience: "5 سنوات",
+        phone: "091-9876543",
+        services: "معدات طبية وزراعية"
+      },
+      {
+        name: "خديجة الزوي",
+        city: "سبها",
+        experience: "4 سنوات",
+        phone: "094-6543210",
+        services: "مستلزمات نسائية وتجارية"
+      }
+    ];
+
+    function renderAgents() {
+      const container = document.getElementById("agents-list");
+      container.innerHTML = "";
+
+      agents.forEach(agent => {
+        const card = document.createElement("div");
+        card.className = "agent-box";
+
+        card.innerHTML = `
+          <h3>${agent.name}</h3>
+          <p><strong>${lang === "ar" ? "المدينة" : "City"}:</strong> ${agent.city}</p>
+          <p><strong>${lang === "ar" ? "الخبرة" : "Experience"}:</strong> ${agent.experience}</p>
+          <p><strong>${lang === "ar" ? "الخدمة" : "Service"}:</strong> ${agent.services}</p>
+          <p><strong>${lang === "ar" ? "الهاتف" : "Phone"}:</strong> ${agent.phone}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    renderAgents();
+  </script>
+</body>
+</html>
