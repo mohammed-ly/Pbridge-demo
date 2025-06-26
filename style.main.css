@@ -1,6 +1,6 @@
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f4f6f8;
+  background-color: #f4f6f9;
   color: #333;
   text-align: center;
   margin: 0;
@@ -14,17 +14,18 @@ header {
 }
 
 main {
-  padding: 30px;
+  padding: 40px 20px;
 }
 
 button {
   background-color: #6f42c1;
   color: white;
   border: none;
-  padding: 12px 28px;
-  border-radius: 5px;
+  padding: 14px 30px;
+  border-radius: 6px;
   font-size: 16px;
   cursor: pointer;
+  margin: 10px;
 }
 
 button:hover {
@@ -34,4 +35,13 @@ button:hover {
 footer {
   margin-top: 40px;
   font-size: 14px;
+  color: #555;
+}
+
+.roles {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 300px;
+  margin: 0 auto;
 }
