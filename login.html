@@ -20,28 +20,30 @@
   <main>
     <div class="login-box">
       <h2 data-en="Login to your account" data-ar="تسجيل الدخول إلى حسابك">Login to your account</h2>
-      <form>
+      <form id="loginForm">
         <label data-en="Email address" data-ar="البريد الإلكتروني">Email address</label>
         <div class="input-icon">
           <i class="fa fa-envelope"></i>
-          <input type="email" placeholder="you@example.com" required />
+          <input type="email" id="email" placeholder="you@example.com" required />
         </div>
 
         <label data-en="Password" data-ar="كلمة المرور">Password</label>
         <div class="input-icon">
           <i class="fa fa-lock"></i>
-          <input type="password" placeholder="••••••••" required />
+          <input type="password" id="password" placeholder="••••••••" required />
         </div>
 
         <label data-en="Login as" data-ar="تسجيل الدخول كـ">Login as</label>
         <div class="input-icon">
           <i class="fa fa-user-tag"></i>
-          <select>
+          <select id="role">
             <option value="agent" data-en="Agent" data-ar="وكيل">Agent</option>
             <option value="trader" data-en="Trader" data-ar="تاجر">Trader</option>
             <option value="company" data-en="Company" data-ar="شركة">Company</option>
           </select>
         </div>
+
+        <small id="login-warning" style="color: red; display: none;"></small>
 
         <button type="submit" data-en="Log In" data-ar="تسجيل الدخول">Log In</button>
       </form>
@@ -62,15 +64,41 @@
       document.documentElement.lang = lang;
       document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
       toggleBtn.textContent = (lang === "en") ? "العربية" : "English";
-
       document.querySelectorAll("[data-en]").forEach(el => {
         el.textContent = el.getAttribute(`data-${lang}`);
       });
-
       document.querySelectorAll("option").forEach(option => {
         option.textContent = option.getAttribute(`data-${lang}`);
       });
     };
+
+    // التحقق من بيانات الدخول
+    const form = document.getElementById("loginForm");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const role = document.getElementById("role");
+    const warning = document.getElementById("login-warning");
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const savedUser = JSON.parse(localStorage.getItem("pbridgeUser"));
+
+      if (
+        savedUser &&
+        email.value === savedUser.email &&
+        password.value === savedUser.password &&
+        role.value === savedUser.role
+      ) {
+        // نجاح الدخول
+        localStorage.setItem("loggedIn", "true");
+        window.location.href = "dashboard.html";
+      } else {
+        warning.textContent = (lang === "ar")
+          ? "بيانات الدخول غير صحيحة"
+          : "Invalid login credentials";
+        warning.style.display = "block";
+      }
+    });
   </script>
 </body>
 </html>
