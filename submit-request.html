@@ -34,6 +34,11 @@
 
     <form id="requestForm">
       <label>
+        <span data-en="Supplier Name" data-ar="اسم المورد / الشركة">Supplier Name</span>
+        <input type="text" name="supplier" required />
+      </label>
+
+      <label>
         <span data-en="Country" data-ar="الدولة">Country</span>
         <input type="text" name="country" required />
       </label>
@@ -44,7 +49,7 @@
       </label>
 
       <label>
-        <span data-en="Total (Pi)" data-ar="الإجمالي (Pi)">Total</span>
+        <span data-en="Invoice Total (Pi)" data-ar="قيمة الفاتورة (Pi)">Invoice Total (Pi)</span>
         <input type="number" name="total" required />
       </label>
 
@@ -55,6 +60,28 @@
           <option value="international" data-en="International" data-ar="دولية">International</option>
         </select>
       </label>
+
+      <label>
+        <span data-en="Commission Paid to You (in LYD)" data-ar="العمولة المستلمة من التاجر (دينار ليبي)">Commission Paid to You</span>
+        <input type="number" name="commission" required />
+      </label>
+
+      <label>
+        <span data-en="Founder’s Fee Payment Method" data-ar="طريقة دفع عمولة المؤسس">Founder’s Fee Payment Method</span>
+        <select name="founderPayMethod" required>
+          <option value="pi" data-en="Via Pi" data-ar="عبر Pi">Via Pi</option>
+          <option value="bank" data-en="Bank Transfer" data-ar="حوالة مصرفية">Bank Transfer</option>
+        </select>
+      </label>
+
+      <label>
+        <span data-en="Note or Reference No." data-ar="ملاحظة أو رقم مرجعي للفاتورة">Note / Reference</span>
+        <textarea name="note" rows="2"></textarea>
+      </label>
+
+      <p style="font-weight:bold; color:#c42">
+        🔒 Only Pi is accepted for supplier payment — local currency is not allowed.
+      </p>
 
       <button type="submit" data-en="Submit Request" data-ar="إرسال الطلب">Submit Request</button>
     </form>
@@ -72,10 +99,6 @@
       document.querySelectorAll("[data-en]").forEach(el => {
         el.textContent = el.getAttribute(`data-${lang}`);
       });
-
-      const s = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
-      s.language = lang;
-      localStorage.setItem("pbridgeSettings", JSON.stringify(s));
     };
 
     document.querySelectorAll("[data-en]").forEach(el => {
@@ -85,20 +108,26 @@
     const form = document.getElementById("requestForm");
     form.onsubmit = e => {
       e.preventDefault();
+
       const requests = JSON.parse(localStorage.getItem("pbridgeRequests")) || [];
-      const request = {
+      const req = {
         client: user.name,
         email: user.email,
+        supplier: form.supplier.value,
         country: form.country.value,
         product: form.product.value,
         total: form.total.value,
-        shipmentType: form.shipmentType.value, // ✅ نوع الشحنة
+        shipmentType: form.shipmentType.value,
+        commissionLYD: form.commission.value,
+        founderPayMethod: form.founderPayMethod.value,
+        note: form.note.value,
         status: "pending",
         time: new Date().toISOString()
       };
-      requests.push(request);
+      requests.push(req);
       localStorage.setItem("pbridgeRequests", JSON.stringify(requests));
-      alert(lang === "ar" ? "تم إرسال الطلب بنجاح" : "Request submitted successfully");
+
+      alert(lang === "ar" ? "تم إرسال الطلب بنجاح ✅" : "Request submitted successfully ✅");
       form.reset();
     };
   </script>
