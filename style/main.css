@@ -1,3 +1,4 @@
+/* الخطوط العامة */
 body {
   font-family: 'Inter', 'Cairo', sans-serif;
   margin: 0;
@@ -5,17 +6,17 @@ body {
   background: url('../assets/bg-bridge-modern.jpg') no-repeat center center fixed;
   background-size: cover;
   color: #333;
-  direction: ltr;
   min-height: 100vh;
 }
 
+/* التنسيق العام */
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgba(111, 66, 193, 0.9);
-  color: white;
+  background-color: rgba(111, 66, 193, 0.95);
   padding: 15px 30px;
+  color: white;
 }
 
 .logo {
@@ -24,95 +25,60 @@ nav {
   gap: 10px;
 }
 
-.logo img {
-  vertical-align: middle;
-}
-
-#lang-toggle {
+nav .actions a {
+  margin-left: 15px;
   background-color: white;
   color: #6f42c1;
+  text-decoration: none;
   font-weight: bold;
-  border: none;
   padding: 8px 16px;
   border-radius: 6px;
-  cursor: pointer;
   transition: 0.3s;
 }
 
-#lang-toggle:hover {
+nav .actions a:hover {
   background-color: #e6d6fd;
 }
 
 header {
   text-align: center;
-  padding: 80px 20px 30px;
-  background-color: rgba(255,255,255,0.85);
-  margin: 30px auto;
-  max-width: 800px;
-  border-radius: 10px;
+  padding: 100px 20px 60px;
 }
 
 header h1 {
-  font-size: 2em;
-  margin: 0;
-  font-weight: 700;
+  font-size: 3em;
+  margin-bottom: 10px;
+}
+
+header .highlight {
+  color: #6f42c1;
 }
 
 header p {
-  font-size: 1.1em;
-  margin-top: 10px;
-  color: #444;
+  font-size: 1.2em;
+  margin-bottom: 30px;
 }
 
-.card-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 30px;
-  padding: 40px 20px;
-}
-
-.role-card {
-  background: rgba(255,255,255,0.95);
-  border-radius: 12px;
-  padding: 30px 20px;
-  width: 240px;
-  text-align: center;
+.cta {
+  background-color: #6f42c1;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
   text-decoration: none;
-  color: #333;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  font-size: 1em;
+  transition: 0.3s;
 }
 
-.role-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.2);
-}
-
-.role-card .icon {
-  font-size: 3em;
-  margin-bottom: 12px;
-}
-
-.role-card h3 {
-  margin: 0;
-  font-weight: 700;
-  font-size: 1.1em;
+.cta:hover {
+  background-color: #542d9d;
 }
 
 footer {
-  background-color: rgba(255,255,255,0.85);
-  color: #555;
   text-align: center;
   padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
   font-size: 0.9em;
-  margin-top: 50px;
-}
-
-html[dir="rtl"] {
-  direction: rtl;
-}
-
-html[dir="rtl"] .logo {
-  flex-direction: row-reverse;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
 }
