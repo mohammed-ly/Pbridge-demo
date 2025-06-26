@@ -36,14 +36,16 @@
         <label data-en="Password" data-ar="كلمة المرور">Password</label>
         <div class="input-icon">
           <i class="fa fa-lock"></i>
-          <input type="password" placeholder="••••••••" required />
+          <input type="password" id="password" placeholder="••••••••" required />
         </div>
 
         <label data-en="Confirm Password" data-ar="تأكيد كلمة المرور">Confirm Password</label>
         <div class="input-icon">
           <i class="fa fa-check-double"></i>
-          <input type="password" placeholder="••••••••" required />
+          <input type="password" id="confirm" placeholder="••••••••" required />
         </div>
+
+        <small id="match-warning" style="color: red; display: none;"></small>
 
         <label data-en="Register as" data-ar="تسجيل كـ">Register as</label>
         <div class="input-icon">
@@ -73,15 +75,31 @@
       document.documentElement.lang = lang;
       document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
       toggleBtn.textContent = (lang === "en") ? "العربية" : "English";
-
       document.querySelectorAll("[data-en]").forEach(el => {
         el.textContent = el.getAttribute(`data-${lang}`);
       });
-
       document.querySelectorAll("option").forEach(option => {
         option.textContent = option.getAttribute(`data-${lang}`);
       });
     };
+
+    // التحقق من تطابق كلمة المرور
+    const form = document.querySelector("form");
+    const password = document.getElementById("password");
+    const confirm = document.getElementById("confirm");
+    const warning = document.getElementById("match-warning");
+
+    form.addEventListener("submit", function(e) {
+      if (password.value !== confirm.value) {
+        e.preventDefault();
+        warning.textContent = (lang === "ar")
+          ? "كلمتا المرور غير متطابقتين"
+          : "Passwords do not match";
+        warning.style.display = "block";
+      } else {
+        warning.style.display = "none";
+      }
+    });
   </script>
 </body>
 </html>
