@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard | PBridge</title>
   <link rel="stylesheet" href="style/dashboard.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
@@ -10,72 +10,56 @@
 <body>
   <nav>
     <div class="logo">
-      <img src="logo/logo-pbridge-transparent.png" alt="PBridge Logo" height="36" />
+      <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="36" />
       <strong>PBridge</strong>
     </div>
-    <div>
+    <div class="actions">
       <button id="lang-toggle">العربية</button>
-      <button id="logoutBtn">Log out</button>
+      <button id="logoutBtn" data-en="Logout" data-ar="تسجيل الخروج">Logout</button>
     </div>
   </nav>
 
   <main>
-    <div class="dashboard-box">
-      <h2 id="welcome">Welcome</h2>
-      <p id="roleInfo"></p>
-      <div class="options">
-        <button disabled id="reqBtn">📝 Request Service</button>
-        <button disabled id="ordersBtn">📦 My Orders</button>
-        <button disabled id="settingsBtn">⚙️ Account Settings</button>
+    <div class="container">
+      <h1 id="welcome" data-en="Welcome," data-ar="مرحبًا،">Welcome,</h1>
+      <p id="roleInfo" data-en="You are logged in as:" data-ar="أنت مسجل الدخول كـ:">You are logged in as:</p>
+
+      <div class="actions">
+        <a href="submit-request.html" class="btn" data-en="Submit Request" data-ar="طلب شحنة">Submit Request</a>
+        <a href="#" class="btn" data-en="View Requests" data-ar="عرض الطلبات">View Requests</a>
       </div>
     </div>
   </main>
 
   <script>
+    // اللغة
     let lang = "en";
     const toggleBtn = document.getElementById("lang-toggle");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const user = JSON.parse(localStorage.getItem("pbridgeUser"));
-    const loggedIn = localStorage.getItem("loggedIn");
-
-    if (!user || loggedIn !== "true") {
-      window.location.href = "login.html";
-    }
-
-    const welcome = document.getElementById("welcome");
-    const roleInfo = document.getElementById("roleInfo");
-
-    const roleNames = {
-      agent: { en: "Agent", ar: "وكيل" },
-      trader: { en: "Trader", ar: "تاجر" },
-      company: { en: "Company", ar: "شركة" }
-    };
-
-    const updateLanguage = () => {
+    toggleBtn.onclick = () => {
+      lang = (lang === "en") ? "ar" : "en";
       document.documentElement.lang = lang;
       document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
       toggleBtn.textContent = (lang === "ar") ? "English" : "العربية";
-      logoutBtn.textContent = (lang === "ar") ? "تسجيل الخروج" : "Log out";
-      welcome.textContent = (lang === "ar") ? `مرحبًا، ${user.name}` : `Welcome, ${user.name}`;
-      roleInfo.textContent = (lang === "ar")
-        ? `نوع الحساب: ${roleNames[user.role].ar}`
-        : `You are logged in as: ${roleNames[user.role].en}`;
-      document.getElementById("reqBtn").textContent = (lang === "ar") ? "📝 طلب خدمة" : "📝 Request Service";
-      document.getElementById("ordersBtn").textContent = (lang === "ar") ? "📦 طلباتي" : "📦 My Orders";
-      document.getElementById("settingsBtn").textContent = (lang === "ar") ? "⚙️ إعدادات الحساب" : "⚙️ Account Settings";
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
     };
 
-    toggleBtn.onclick = () => {
-      lang = (lang === "en") ? "ar" : "en";
-      updateLanguage();
-    };
+    // عرض اسم المستخدم والدور
+    const user = JSON.parse(localStorage.getItem("pbridgeUser"));
+    const welcome = document.getElementById("welcome");
+    const roleInfo = document.getElementById("roleInfo");
 
-    logoutBtn.onclick = () => {
+    if (user) {
+      welcome.innerHTML += " " + user.name;
+      roleInfo.innerHTML += " " + user.role;
+    }
+
+    // تسجيل الخروج
+    document.getElementById("logoutBtn").onclick = () => {
       localStorage.removeItem("loggedIn");
       window.location.href = "login.html";
     };
-
-    updateLanguage(); // تعيين اللغة تلقائيًا عند الدخول
   </script>
 </body>
 </html>
