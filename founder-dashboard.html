@@ -25,7 +25,7 @@
     </div>
     <div class="actions">
       <button id="lang-toggle">العربية</button>
-      <a href="settings.html" class="button" data-en="Settings" data-ar="الإعدادات">Settings</a>
+      <a href="activity-log.html" class="button" data-en="Activity Log" data-ar="سجل النشاطات">Activity</a>
     </div>
   </nav>
 
@@ -94,13 +94,25 @@
 
     function statusLabel(status) {
       return lang === "ar"
-        ? status === "approved" ? "موافَق عليه" : status === "rejected" ? "مرفوض" : "قيد الانتظار"
+        ? status === "approved" ? "موافق عليه" : status === "rejected" ? "مرفوض" : "قيد الانتظار"
         : status.charAt(0).toUpperCase() + status.slice(1);
     }
 
     function updateStatus(index, newStatus) {
       requests[index].status = newStatus;
       localStorage.setItem("pbridgeRequests", JSON.stringify(requests));
+
+      // ✅ إضافة سجل النشاط عند الموافقة أو الرفض
+      const logs = JSON.parse(localStorage.getItem("pbridgeActivity")) || [];
+      logs.push({
+        actor: user.name,
+        role: user.role || "founder",
+        action: newStatus,
+        time: new Date().toISOString(),
+        reference: `طلب من ${requests[index].country} إلى ${requests[index].supplier}`
+      });
+      localStorage.setItem("pbridgeActivity", JSON.stringify(logs));
+
       renderRequests();
     }
 
