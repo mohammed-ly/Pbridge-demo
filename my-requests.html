@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Requests | PBridge</title>
+  <link rel="stylesheet" href="style/my-requests.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="36" />
+      <strong>PBridge</strong>
+    </div>
+    <div class="actions">
+      <button id="lang-toggle">العربية</button>
+      <a href="dashboard.html" class="button" data-en="Back" data-ar="الرجوع">Back</a>
+    </div>
+  </nav>
+
+  <main>
+    <h1 data-en="My Submitted Requests" data-ar="طلباتي السابقة">My Submitted Requests</h1>
+    <div id="requests-container" class="container"></div>
+  </main>
+
+  <script>
+    let lang = "en";
+    const toggleBtn = document.getElementById("lang-toggle");
+
+    toggleBtn.onclick = () => {
+      lang = lang === "en" ? "ar" : "en";
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      toggleBtn.textContent = lang === "ar" ? "English" : "العربية";
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+      renderMyRequests();
+    };
+
+    const currentUser = JSON.parse(localStorage.getItem("pbridgeUser"));
+    const allRequests = JSON.parse(localStorage.getItem("pbridgeRequests")) || [];
+    const myRequests = allRequests.filter(r => r.client === currentUser?.name);
+    const container = document.getElementById("requests-container");
+
+    function renderMyRequests() {
+      container.innerHTML = "";
+      if (myRequests.length === 0) {
+        container.innerHTML = lang === "ar" ? "<p>لا توجد طلبات حتى الآن.</p>" : "<p>No requests yet.</p>";
+        return;
+      }
+
+      myRequests.forEach(req => {
+        const statusColor = req.status === "approved" ? "green"
+                          : req.status === "rejected" ? "crimson"
+                          : "gray";
+
+        const statusText = req.status === "approved"
+          ? (lang === "ar" ? "تمت الموافقة" : "Approved")
+          : req.status === "rejected"
+            ? (lang === "ar" ? "مرفوض" : "Rejected")
+            : (lang === "ar" ? "قيد الانتظار" : "Pending");
+
+        const box = document.createElement("div");
+        box.className = "request-box";
+        box.innerHTML = `
+          <p><strong>${lang === "ar" ? "البلد" : "Country"}:</strong> ${req.country}</p>
+          <p><strong>${lang === "ar" ? "المنتج" : "Product"}:</strong> ${req.product}</p>
+          <p><strong>${lang === "ar" ? "القيمة" : "Total"}:</strong> ${req.total} Pi</p>
+          <p><strong>${lang === "ar" ? "الحالة" : "Status"}:</strong> <span style="color:${statusColor}; font-weight: bold;">${statusText}</span></p>
+        `;
+        container.appendChild(box);
+      });
+    }
+
+    renderMyRequests();
+  </script>
+</body>
+</html>
