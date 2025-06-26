@@ -1,29 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PBridge Platform</title>
+  <title>PBridge Platform | Trade with Pi</title>
   <link rel="stylesheet" href="style/main.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
 </head>
 <body>
   <header>
-    <h1>PBridge Trade Platform</h1>
-    <p>Connecting traders, agents, and businesses — powered by Pi Network</p>
+    <h1 data-en="PBridge Platform" data-ar="منصة PBridge">PBridge Platform</h1>
+    <p data-en="Connecting global trade with Pi Network" data-ar="ربط التجارة العالمية بشبكة Pi">Connecting global trade with Pi Network</p>
+    <button id="lang-toggle">العربية</button>
   </header>
 
   <main>
-    <p>Choose your portal:</p>
+    <p data-en="Choose your portal:" data-ar="اختر البوابة المناسبة:">Choose your portal:</p>
     <div class="roles">
-      <a href="login.html?role=agent"><button>🧭 Agent Login</button></a>
-      <a href="login.html?role=trader"><button>📦 Trader Login</button></a>
-      <a href="login.html?role=company"><button>🏢 Company Login</button></a>
+      <a href="login.html?role=agent"><button data-en="Agent Login" data-ar="تسجيل الوكلاء">Agent Login</button></a>
+      <a href="login.html?role=trader"><button data-en="Trader Login" data-ar="تسجيل التجار">Trader Login</button></a>
+      <a href="login.html?role=company"><button data-en="Company Login" data-ar="تسجيل الشركات">Company Login</button></a>
     </div>
   </main>
 
   <footer>
-    <a href="privacy-policy.html">Privacy Policy</a> | 
-    <a href="terms.html">Terms of Service</a>
+    <a href="privacy-policy.html" data-en="Privacy Policy" data-ar="سياسة الخصوصية">Privacy Policy</a> |
+    <a href="terms.html" data-en="Terms of Service" data-ar="شروط الاستخدام">Terms of Service</a>
   </footer>
+
+  <script>
+    const toggleBtn = document.getElementById("lang-toggle");
+    let lang = "en";
+
+    toggleBtn.onclick = () => {
+      lang = (lang === "en") ? "ar" : "en";
+      document.documentElement.lang = lang;
+      document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
+      toggleBtn.textContent = (lang === "en") ? "العربية" : "English";
+
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+    };
+  </script>
 </body>
 </html>
