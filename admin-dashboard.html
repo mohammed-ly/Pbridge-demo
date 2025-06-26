@@ -20,7 +20,7 @@
   </nav>
 
   <main>
-    <h1 data-en="Pending Requests" data-ar="الطلبات قيد المراجعة">Pending Requests</h1>
+    <h1 data-en="Submitted Requests" data-ar="الطلبات المقدّمة">Submitted Requests</h1>
     <div id="requests-container" class="container"></div>
   </main>
 
@@ -36,48 +36,64 @@
       document.querySelectorAll("[data-en]").forEach(el => {
         el.textContent = el.getAttribute(`data-${lang}`);
       });
+      renderRequests(); // لإعادة عرض النصوص المترجمة داخل الطلبات
     };
 
-    const requests = JSON.parse(localStorage.getItem("pbridgeRequests")) || [];
     const container = document.getElementById("requests-container");
+    let requests = JSON.parse(localStorage.getItem("pbridgeRequests")) || [];
 
     function renderRequests() {
       container.innerHTML = "";
       if (requests.length === 0) {
-        container.innerHTML = lang === "ar" ? "<p>لا توجد طلبات حالياً</p>" : "<p>No pending requests</p>";
+        container.innerHTML = lang === "ar" ? "<p>لا توجد طلبات حالياً</p>" : "<p>No requests available.</p>";
         return;
       }
 
       requests.forEach((req, index) => {
         const box = document.createElement("div");
         box.className = "request-box";
+
+        const statusColor = req.status === "approved"
+          ? "green"
+          : req.status === "rejected"
+            ? "crimson"
+            : "gray";
+
+        const statusText = req.status === "approved"
+          ? (lang === "ar" ? "تمت الموافقة" : "Approved")
+          : req.status === "rejected"
+            ? (lang === "ar" ? "مرفوض" : "Rejected")
+            : (lang === "ar" ? "قيد الانتظار" : "Pending");
+
         box.innerHTML = `
           <p><strong>${lang === "ar" ? "العميل" : "Client"}:</strong> ${req.client}</p>
           <p><strong>${lang === "ar" ? "البلد" : "Country"}:</strong> ${req.country}</p>
           <p><strong>${lang === "ar" ? "المنتج" : "Product"}:</strong> ${req.product}</p>
           <p><strong>${lang === "ar" ? "القيمة" : "Total"}:</strong> ${req.total} Pi</p>
-          <div class="actions">
-            <button onclick="approve(${index})">${lang === "ar" ? "موافقة" : "Approve"}</button>
-            <button onclick="reject(${index})">${lang === "ar" ? "رفض" : "Reject"}</button>
-          </div>
+          <p><strong>${lang === "ar" ? "الحالة" : "Status"}:</strong> <span style="color:${statusColor}; font-weight: bold;">${statusText}</span></p>
+          ${req.status === "pending" ? `
+            <div class="actions">
+              <button onclick="updateStatus(${index}, 'approved')">${lang === "ar" ? "موافقة" : "Approve"}</button>
+              <button onclick="updateStatus(${index}, 'rejected')">${lang === "ar" ? "رفض" : "Reject"}</button>
+            </div>
+          ` : ""}
         `;
         container.appendChild(box);
       });
     }
 
-    function approve(i) {
-      alert(lang === "ar" ? "تمت الموافقة على الطلب!" : "Request approved!");
-      requests.splice(i, 1);
+    function updateStatus(index, status) {
+      requests[index].status = status;
       localStorage.setItem("pbridgeRequests", JSON.stringify(requests));
       renderRequests();
     }
 
-    function reject(i) {
-      alert(lang === "ar" ? "تم رفض الطلب." : "Request rejected.");
-      requests.splice(i, 1);
-      localStorage.setItem("pbridgeRequests", JSON.stringify(requests));
-      renderRequests();
-    }
+    // إذا كانت الطلبات لا تحتوي على status نُهيئها
+    requests = requests.map(req => ({
+      ...req,
+      status: req.status || "pending"
+    }));
+    localStorage.setItem("pbridgeRequests", JSON.stringify(requests));
 
     renderRequests();
   </script>
