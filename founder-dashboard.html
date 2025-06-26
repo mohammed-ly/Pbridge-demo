@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Founder Dashboard | PBridge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style/dashboard.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <script>
+    const user = JSON.parse(localStorage.getItem("pbridgeUser"));
+    if (!user || user.role !== "founder") location.href = "login.html";
+
+    const settings = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
+    if (settings.theme === "dark") document.body.className = "dark";
+    document.documentElement.lang = settings.language || "en";
+    document.documentElement.dir = settings.language === "ar" ? "rtl" : "ltr";
+  </script>
+
+  <nav>
+    <div class="logo">
+      <img src="logo/logo-pbridge-transparent.png" alt="Logo" height="34" />
+      <strong>PBridge – Founder</strong>
+    </div>
+    <div class="actions">
+      <button id="lang-toggle">العربية</button>
+      <a href="settings.html" class="button" data-en="Settings" data-ar="الإعدادات">Settings</a>
+    </div>
+  </nav>
+
+  <main>
+    <h1 data-en="Incoming Requests" data-ar="الطلبات الواردة">Incoming Requests</h1>
+    <div id="requests-container" class="container"></div>
+  </main>
+
+  <script>
+    let lang = settings.language || "en";
+    const toggleBtn = document.getElementById("lang-toggle");
+
+    toggleBtn.onclick = () => {
+      lang = lang === "en" ? "ar" : "en";
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      toggleBtn.textContent = lang === "ar" ? "English" : "العربية";
+      document.querySelectorAll("[data-en]").forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+      renderRequests();
+    };
+
+    document.querySelectorAll("[data-en]").forEach(el => {
+      el.textContent = el.getAttribute(`data-${lang}`);
+    });
+
+    const container = document.getElementById("requests-container");
+    let requests = JSON.parse(localStorage.getItem("pbridgeRequests")) || [];
+
+    function renderRequests() {
+      container.innerHTML = "";
+      if (requests.length === 0) {
+        container.innerHTML = `<p>${lang === "ar" ? "لا توجد طلبات بعد" : "No requests found."}</p>`;
+        return;
+      }
+
+      requests.forEach((req, index) => {
+        const box = document.createElement("div");
+        box.className = "request-box";
+
+        const shipmentType = req.shipmentType === "local" ? (lang === "ar" ? "محلية" : "Local") : (lang === "ar" ? "دولية" : "International");
+        const founderPay = req.founderPayMethod === "bank" ? (lang === "ar" ? "حوالة مصرفية" : "Bank Transfer") : (lang === "ar" ? "عبر Pi" : "Pi");
+
+        box.innerHTML = `
+          <p><strong>${lang === "ar" ? "العميل" : "Client"}:</strong> ${req.client}</p>
+          <p><strong>${lang === "ar" ? "المورد" : "Supplier"}:</strong> ${req.supplier}</p>
+          <p><strong>${lang === "ar" ? "البلد" : "Country"}:</strong> ${req.country}</p>
+          <p><strong>${lang === "ar" ? "المنتج" : "Product"}:</strong> ${req.product}</p>
+          <p><strong>${lang === "ar" ? "قيمة الفاتورة" : "Invoice"}:</strong> ${req.total} Pi</p>
+          <p><strong>${lang === "ar" ? "نوع الشحنة" : "Shipment"}:</strong> ${shipmentType}</p>
+          <p><strong>${lang === "ar" ? "العمولة" : "Commission"}:</strong> ${req.commissionLYD} LYD</p>
+          <p><strong>${lang === "ar" ? "دفع العمولة" : "Fee Paid By"}:</strong> ${founderPay}</p>
+          <p><strong>${lang === "ar" ? "ملاحظة" : "Note"}:</strong> ${req.note || "-"}</p>
+          <p><strong>${lang === "ar" ? "الحالة" : "Status"}:</strong> ${statusLabel(req.status)}</p>
+          <div class="actions">
+            ${req.status === "pending" ? `
+              <button onclick="updateStatus(${index}, 'approved')">${lang === "ar" ? "موافقة ✅" : "Approve ✅"}</button>
+              <button onclick="updateStatus(${index}, 'rejected')">${lang === "ar" ? "رفض ❌" : "Reject ❌"}</button>
+            ` : ""}
+          </div>
+        `;
+        container.appendChild(box);
+      });
+    }
+
+    function statusLabel(status) {
+      return lang === "ar"
+        ? status === "approved" ? "موافَق عليه" : status === "rejected" ? "مرفوض" : "قيد الانتظار"
+        : status.charAt(0).toUpperCase() + status.slice(1);
+    }
+
+    function updateStatus(index, newStatus) {
+      requests[index].status = newStatus;
+      localStorage.setItem("pbridgeRequests", JSON.stringify(requests));
+      renderRequests();
+    }
+
+    renderRequests();
+  </script>
+</body>
+</html>
