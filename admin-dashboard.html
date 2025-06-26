@@ -2,8 +2,8 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard | PBridge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="style/admin-dashboard.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
 </head>
@@ -14,6 +14,11 @@
       alert("Access denied. Only Founder can view this page.");
       window.location.href = "dashboard.html";
     }
+
+    const settings = JSON.parse(localStorage.getItem("pbridgeSettings")) || {};
+    if (settings.theme === "dark") document.body.className = "dark";
+    document.documentElement.lang = settings.language || "en";
+    document.documentElement.dir = settings.language === "ar" ? "rtl" : "ltr";
   </script>
 
   <nav>
@@ -33,7 +38,7 @@
   </main>
 
   <script>
-    let lang = "en";
+    let lang = JSON.parse(localStorage.getItem("pbridgeSettings"))?.language || "en";
     const toggleBtn = document.getElementById("lang-toggle");
 
     toggleBtn.onclick = () => {
@@ -93,7 +98,6 @@
       currentRequest.status = status;
       localStorage.setItem("pbridgeRequests", JSON.stringify(requests));
 
-      // إرسال إشعار للمستخدم
       const notifs = JSON.parse(localStorage.getItem("pbridgeNotifications")) || [];
       const statusMsg = status === "approved"
         ? (lang === "ar" ? "تمت الموافقة على طلبك بنجاح." : "Your request was approved.")
@@ -111,7 +115,6 @@
       renderRequests();
     }
 
-    // تأكد أن جميع الطلبات تحتوي على حالة وبريد
     requests = requests.map(req => ({
       ...req,
       status: req.status || "pending",
