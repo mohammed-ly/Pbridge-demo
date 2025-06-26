@@ -5,8 +5,8 @@ body {
   margin: 0;
   padding: 0;
   direction: ltr;
-  min-height: 100vh;
   color: #333;
+  min-height: 100vh;
 }
 
 nav {
@@ -51,12 +51,13 @@ main {
 }
 
 .login-box {
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(255, 255, 255, 0.93);
   padding: 40px 30px;
   max-width: 420px;
   width: 100%;
   border-radius: 10px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  backdrop-filter: blur(4px);
 }
 
 .login-box h2 {
@@ -66,23 +67,42 @@ main {
   margin-bottom: 30px;
 }
 
-.login-box form {
-  display: flex;
-  flex-direction: column;
-}
-
 .login-box label {
-  margin-bottom: 5px;
   font-weight: bold;
+  margin-bottom: 6px;
+  display: block;
 }
 
-.login-box input,
-.login-box select {
+.input-icon {
+  position: relative;
   margin-bottom: 20px;
-  padding: 10px;
+}
+
+.input-icon i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6f42c1;
+}
+
+html[dir="rtl"] .input-icon i {
+  left: auto;
+  right: 12px;
+}
+
+.input-icon input,
+.input-icon select {
+  width: 100%;
+  padding: 10px 10px 10px 38px;
+  font-size: 1em;
   border: 1px solid #ccc;
   border-radius: 6px;
-  font-size: 1em;
+}
+
+html[dir="rtl"] .input-icon input,
+html[dir="rtl"] .input-icon select {
+  padding: 10px 38px 10px 10px;
 }
 
 .login-box button {
@@ -95,6 +115,7 @@ main {
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s;
+  width: 100%;
 }
 
 .login-box button:hover {
