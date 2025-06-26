@@ -5,7 +5,7 @@
   <title>My Requests | PBridge</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="style/my-requests.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
 </head>
 <body>
   <script>
@@ -49,39 +49,40 @@
       renderRequests();
     };
 
+    document.querySelectorAll("[data-en]").forEach(el => {
+      el.textContent = el.getAttribute(`data-${lang}`);
+    });
+
     const container = document.getElementById("requests-container");
-    const allRequests = JSON.parse(localStorage.getItem("pbridgeRequests")) || [];
-    const myRequests = allRequests.filter(r => r.email === user.email);
+    const requests = (JSON.parse(localStorage.getItem("pbridgeRequests")) || []).filter(r => r.email === user.email);
 
     function renderRequests() {
       container.innerHTML = "";
-      if (myRequests.length === 0) {
-        container.innerHTML = lang === "ar"
-          ? "<p>لا توجد طلبات حتى الآن.</p>"
-          : "<p>No requests yet.</p>";
+      if (requests.length === 0) {
+        container.innerHTML = `<p>${lang === "ar" ? "لا توجد طلبات حالياً" : "No requests yet."}</p>`;
         return;
       }
 
-      [...myRequests].reverse().forEach(req => {
+      requests.forEach(req => {
         const box = document.createElement("div");
         box.className = "request-box";
 
-        const color = req.status === "approved" ? "#4CAF50"
-                    : req.status === "rejected" ? "#f44336"
-                    : "#888";
+        const statusColor = req.status === "approved" ? "green"
+                        : req.status === "rejected" ? "crimson"
+                        : "gray";
 
-        const statusLabel = req.status === "approved"
-          ? (lang === "ar" ? "تمت الموافقة" : "Approved")
-          : req.status === "rejected"
-            ? (lang === "ar" ? "مرفوض" : "Rejected")
-            : (lang === "ar" ? "قيد الانتظار" : "Pending");
+        const typeLabel = req.shipmentType === "local"
+          ? (lang === "ar" ? "محلية" : "Local")
+          : (lang === "ar" ? "دولية" : "International");
 
         box.innerHTML = `
-          <p><strong>${lang === "ar" ? "العميل" : "Client"}:</strong> ${req.client}</p>
-          <p><strong>${lang === "ar" ? "البلد" : "Country"}:</strong> ${req.country}</p>
+          <p><strong>${lang === "ar" ? "الدولة" : "Country"}:</strong> ${req.country}</p>
           <p><strong>${lang === "ar" ? "المنتج" : "Product"}:</strong> ${req.product}</p>
-          <p><strong>${lang === "ar" ? "القيمة" : "Total"}:</strong> ${req.total} Pi</p>
-          <p><strong>${lang === "ar" ? "الحالة" : "Status"}:</strong> <span style="color:${color}; font-weight: bold;">${statusLabel}</span></p>
+          <p><strong>${lang === "ar" ? "الإجمالي" : "Total"}:</strong> ${req.total} Pi</p>
+          <p><strong>${lang === "ar" ? "نوع الشحنة" : "Shipment Type"}:</strong> ${typeLabel}</p>
+          <p><strong>${lang === "ar" ? "الحالة" : "Status"}:</strong> <span style="color:${statusColor}; font-weight:bold">${lang === "ar"
+            ? (req.status === "approved" ? "موافَق عليه" : req.status === "rejected" ? "مرفوض" : "قيد الانتظار")
+            : (req.status === "approved" ? "Approved" : req.status === "rejected" ? "Rejected" : "Pending")}</span></p>
         `;
         container.appendChild(box);
       });
