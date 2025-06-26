@@ -46,7 +46,7 @@
   <script>
     let lang = "en";
     const commissionRate = 0.03;
-    let balance = 10.0; // رصيد الوكيل (افتراضي الآن)
+    let balance = 10.0; // رصيد افتراضي
 
     const toggleBtn = document.getElementById("lang-toggle");
     toggleBtn.onclick = () => {
@@ -83,6 +83,17 @@
 
     form.onsubmit = e => {
       e.preventDefault();
+      const client = document.getElementById("clientName").value.trim();
+      const country = document.getElementById("country").value.trim();
+      const product = document.getElementById("productType").value.trim();
+      const total = parseFloat(document.getElementById("totalValue").value);
+
+      const newRequest = { client, country, product, total };
+
+      const existing = JSON.parse(localStorage.getItem("pbridgeRequests")) || [];
+      existing.push(newRequest);
+      localStorage.setItem("pbridgeRequests", JSON.stringify(existing));
+
       alert(lang === "ar" ? "تم إرسال الطلب بنجاح!" : "Request submitted successfully!");
       form.reset();
       commissionInfo.innerText = "";
