@@ -20,17 +20,17 @@
   <main>
     <div class="signup-box">
       <h2 data-en="Create a new account" data-ar="إنشاء حساب جديد">Create a new account</h2>
-      <form>
+      <form id="signupForm">
         <label data-en="Full Name" data-ar="الاسم الكامل">Full Name</label>
         <div class="input-icon">
           <i class="fa fa-user"></i>
-          <input type="text" placeholder="Your name" required />
+          <input type="text" id="name" placeholder="Your name" required />
         </div>
 
         <label data-en="Email address" data-ar="البريد الإلكتروني">Email address</label>
         <div class="input-icon">
           <i class="fa fa-envelope"></i>
-          <input type="email" placeholder="you@example.com" required />
+          <input type="email" id="email" placeholder="you@example.com" required />
         </div>
 
         <label data-en="Password" data-ar="كلمة المرور">Password</label>
@@ -50,7 +50,7 @@
         <label data-en="Register as" data-ar="تسجيل كـ">Register as</label>
         <div class="input-icon">
           <i class="fa fa-user-tag"></i>
-          <select>
+          <select id="role" required>
             <option value="agent" data-en="Agent" data-ar="وكيل">Agent</option>
             <option value="trader" data-en="Trader" data-ar="تاجر">Trader</option>
             <option value="company" data-en="Company" data-ar="شركة">Company</option>
@@ -83,10 +83,13 @@
       });
     };
 
-    // التحقق من تطابق كلمة المرور
-    const form = document.querySelector("form");
+    // تخزين البيانات والتحقق
+    const form = document.getElementById("signupForm");
+    const name = document.getElementById("name");
+    const email = document.getElementById("email");
     const password = document.getElementById("password");
     const confirm = document.getElementById("confirm");
+    const role = document.getElementById("role");
     const warning = document.getElementById("match-warning");
 
     form.addEventListener("submit", function(e) {
@@ -96,9 +99,20 @@
           ? "كلمتا المرور غير متطابقتين"
           : "Passwords do not match";
         warning.style.display = "block";
-      } else {
-        warning.style.display = "none";
+        return;
       }
+
+      // حفظ البيانات في localStorage
+      const user = {
+        name: name.value,
+        email: email.value,
+        password: password.value,
+        role: role.value
+      };
+      localStorage.setItem("pbridgeUser", JSON.stringify(user));
+      
+      // إعادة التوجيه إلى صفحة تسجيل الدخول
+      window.location.href = "login.html";
     });
   </script>
 </body>
