@@ -1,3 +1,7 @@
+<!-- ✅ الكود المحدث لـ submit-request.html -->
+<!-- يحفظ البريد وحالة الطلب لتظهر لاحقًا في لوحات المستخدم والمؤسس -->
+<!-- نسخة جاهزة للنسخ الكامل -->
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -46,7 +50,7 @@
   <script>
     let lang = "en";
     const commissionRate = 0.03;
-    let balance = 10.0; // رصيد افتراضي
+    let balance = 10.0;
 
     const toggleBtn = document.getElementById("lang-toggle");
     toggleBtn.onclick = () => {
@@ -83,12 +87,16 @@
 
     form.onsubmit = e => {
       e.preventDefault();
+
       const client = document.getElementById("clientName").value.trim();
       const country = document.getElementById("country").value.trim();
       const product = document.getElementById("productType").value.trim();
       const total = parseFloat(document.getElementById("totalValue").value);
 
-      const newRequest = { client, country, product, total };
+      const currentUser = JSON.parse(localStorage.getItem("pbridgeUser"));
+      const email = currentUser?.email || "unknown@example.com";
+
+      const newRequest = { client, country, product, total, email, status: "pending" };
 
       const existing = JSON.parse(localStorage.getItem("pbridgeRequests")) || [];
       existing.push(newRequest);
