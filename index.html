@@ -2,66 +2,31 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PBridge | Web3 Trade Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PBridge | Home</title>
   <link rel="stylesheet" href="style/main.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
 </head>
 <body>
   <nav>
     <div class="logo">
       <img src="logo/logo-pbridge-transparent.png" alt="PBridge Logo" height="36" />
-      <strong data-en="PBridge" data-ar="PBridge">PBridge</strong>
+      <strong>PBridge</strong>
     </div>
-    <button id="lang-toggle">العربية</button>
+    <div class="actions">
+      <a href="login.html" class="button">Login</a>
+      <a href="signup.html" class="button">Sign Up</a>
+    </div>
   </nav>
 
   <header>
-    <h1 data-en="Powering Trade with Pi Network" data-ar="نحو التجارة الحديثة عبر Pi">Powering Trade with Pi Network</h1>
-    <p data-en="A unified platform for agents, traders & companies" data-ar="منصة موحدة للوكلاء، التجار، والشركات">A unified platform for agents, traders & companies</p>
+    <h1>Welcome to <span class="highlight">PBridge</span></h1>
+    <p>The trusted network to request and fulfill international trade using Pi Currency 🌍</p>
+    <a href="login.html" class="cta">Get Started</a>
   </header>
 
-  <main>
-    <div class="card-container">
-      <a href="login.html?role=agent" class="role-card">
-        <div class="icon">🧭</div>
-        <h3 data-en="Agent Portal" data-ar="بوابة الوكلاء">Agent Portal</h3>
-      </a>
-      <a href="login.html?role=trader" class="role-card">
-        <div class="icon">📦</div>
-        <h3 data-en="Trader Portal" data-ar="بوابة التجار">Trader Portal</h3>
-      </a>
-      <a href="login.html?role=company" class="role-card">
-        <div class="icon">🏢</div>
-        <h3 data-en="Company Portal" data-ar="بوابة الشركات">Company Portal</h3>
-      </a>
-    </div>
-  </main>
-
   <footer>
-    <p>
-      <a href="privacy-policy.html" data-en="Privacy Policy" data-ar="سياسة الخصوصية">Privacy Policy</a> | 
-      <a href="terms.html" data-en="Terms of Service" data-ar="شروط الاستخدام">Terms of Service</a>
-    </p>
-    <p data-en="Built with ❤️ by Mohammed" data-ar="بُني بحب بواسطة محمد">Built with ❤️ by Mohammed</p>
+    <p>&copy; 2025 PBridge. All rights reserved.</p>
   </footer>
-
-  <script>
-    const toggleBtn = document.getElementById("lang-toggle");
-    let lang = "en";
-
-    toggleBtn.onclick = () => {
-      lang = (lang === "en") ? "ar" : "en";
-      document.documentElement.lang = lang;
-      document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
-      toggleBtn.textContent = (lang === "en") ? "العربية" : "English";
-
-      document.querySelectorAll("[data-en]").forEach(el => {
-        el.textContent = el.getAttribute(`data-${lang}`);
-      });
-    };
-  </script>
 </body>
 </html>
