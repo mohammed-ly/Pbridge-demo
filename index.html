@@ -3,31 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PBridge Platform | Trade with Pi</title>
+  <title>PBridge | Trade Platform</title>
   <link rel="stylesheet" href="style/main.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <header>
-    <h1 data-en="PBridge Platform" data-ar="منصة PBridge">PBridge Platform</h1>
-    <p data-en="Connecting global trade with Pi Network" data-ar="ربط التجارة العالمية بشبكة Pi">Connecting global trade with Pi Network</p>
+  <nav>
+    <div class="logo">
+      <span>🪙</span> <strong data-en="PBridge" data-ar="PBridge">PBridge</strong>
+    </div>
     <button id="lang-toggle">العربية</button>
+  </nav>
+
+  <header>
+    <h1 data-en="Powering Trade with Pi Network" data-ar="نحو التجارة الحديثة عبر Pi">Powering Trade with Pi Network</h1>
+    <p data-en="A unified platform for agents, traders & companies" data-ar="منصة موحدة للوكلاء، التجار، والشركات">A unified platform for agents, traders & companies</p>
   </header>
 
   <main>
-    <p data-en="Choose your portal:" data-ar="اختر البوابة المناسبة:">Choose your portal:</p>
-    <div class="roles">
-      <a href="login.html?role=agent"><button data-en="Agent Login" data-ar="تسجيل الوكلاء">Agent Login</button></a>
-      <a href="login.html?role=trader"><button data-en="Trader Login" data-ar="تسجيل التجار">Trader Login</button></a>
-      <a href="login.html?role=company"><button data-en="Company Login" data-ar="تسجيل الشركات">Company Login</button></a>
+    <div class="card-container">
+      <a href="login.html?role=agent" class="role-card">
+        <div class="icon">🧭</div>
+        <h3 data-en="Agent Portal" data-ar="بوابة الوكلاء">Agent Portal</h3>
+      </a>
+      <a href="login.html?role=trader" class="role-card">
+        <div class="icon">📦</div>
+        <h3 data-en="Trader Portal" data-ar="بوابة التجار">Trader Portal</h3>
+      </a>
+      <a href="login.html?role=company" class="role-card">
+        <div class="icon">🏢</div>
+        <h3 data-en="Company Portal" data-ar="بوابة الشركات">Company Portal</h3>
+      </a>
     </div>
   </main>
 
   <footer>
-    <a href="privacy-policy.html" data-en="Privacy Policy" data-ar="سياسة الخصوصية">Privacy Policy</a> |
-    <a href="terms.html" data-en="Terms of Service" data-ar="شروط الاستخدام">Terms of Service</a>
+    <p>
+      <a href="privacy-policy.html" data-en="Privacy Policy" data-ar="سياسة الخصوصية">Privacy Policy</a> | 
+      <a href="terms.html" data-en="Terms of Service" data-ar="شروط الاستخدام">Terms of Service</a>
+    </p>
+    <p data-en="Built with ❤️ by Mohammed" data-ar="بُني بحب بواسطة محمد">Built with ❤️ by Mohammed</p>
   </footer>
 
   <script>
