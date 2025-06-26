@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | PBridge</title>
+  <link rel="stylesheet" href="style/dashboard.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <img src="logo/logo-pbridge-transparent.png" alt="PBridge Logo" height="36" />
+      <strong>PBridge</strong>
+    </div>
+    <button id="logoutBtn">Log out</button>
+  </nav>
+
+  <main>
+    <div class="dashboard-box">
+      <h2 id="welcome">Welcome</h2>
+      <p id="roleInfo"></p>
+      <div class="options">
+        <button disabled>📝 Request Service</button>
+        <button disabled>📦 My Orders</button>
+        <button disabled>⚙️ Account Settings</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem("pbridgeUser"));
+    const loggedIn = localStorage.getItem("loggedIn");
+
+    if (!user || loggedIn !== "true") {
+      window.location.href = "login.html";
+    }
+
+    document.getElementById("welcome").textContent = `Welcome, ${user.name}`;
+    document.getElementById("roleInfo").textContent = `You are logged in as: ${user.role}`;
+
+    document.getElementById("logoutBtn").onclick = () => {
+      localStorage.removeItem("loggedIn");
+      window.location.href = "login.html";
+    };
+  </script>
+</body>
+</html>
