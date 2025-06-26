@@ -5,7 +5,7 @@
   <title>Submit Request | PBridge</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="style/submit-request.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
 </head>
 <body>
   <script>
@@ -30,16 +30,11 @@
   </nav>
 
   <main>
-    <h1 data-en="Submit New Request" data-ar="إرسال طلب جديد">Submit New Request</h1>
+    <h1 data-en="Submit Shipping Request" data-ar="إرسال طلب شحنة">Submit Shipping Request</h1>
 
     <form id="requestForm">
       <label>
-        <span data-en="Client Name" data-ar="اسم العميل">Client Name</span>
-        <input type="text" name="client" required />
-      </label>
-
-      <label>
-        <span data-en="Country" data-ar="البلد">Country</span>
+        <span data-en="Country" data-ar="الدولة">Country</span>
         <input type="text" name="country" required />
       </label>
 
@@ -49,8 +44,16 @@
       </label>
 
       <label>
-        <span data-en="Total (in Pi)" data-ar="الإجمالي (بالـ Pi)">Total (in Pi)</span>
-        <input type="number" name="total" step="0.01" required />
+        <span data-en="Total (Pi)" data-ar="الإجمالي (Pi)">Total</span>
+        <input type="number" name="total" required />
+      </label>
+
+      <label>
+        <span data-en="Shipment Type" data-ar="نوع الشحنة">Shipment Type</span>
+        <select name="shipmentType" required>
+          <option value="local" data-en="Local (within Libya)" data-ar="محلية (داخل ليبيا)">Local</option>
+          <option value="international" data-en="International" data-ar="دولية">International</option>
+        </select>
       </label>
 
       <button type="submit" data-en="Submit Request" data-ar="إرسال الطلب">Submit Request</button>
@@ -80,22 +83,21 @@
     });
 
     const form = document.getElementById("requestForm");
-
     form.onsubmit = e => {
       e.preventDefault();
-      const req = {
-        client: form.client.value,
+      const requests = JSON.parse(localStorage.getItem("pbridgeRequests")) || [];
+      const request = {
+        client: user.name,
+        email: user.email,
         country: form.country.value,
         product: form.product.value,
         total: form.total.value,
+        shipmentType: form.shipmentType.value, // ✅ نوع الشحنة
         status: "pending",
-        email: user.email
+        time: new Date().toISOString()
       };
-
-      const all = JSON.parse(localStorage.getItem("pbridgeRequests")) || [];
-      all.push(req);
-      localStorage.setItem("pbridgeRequests", JSON.stringify(all));
-
+      requests.push(request);
+      localStorage.setItem("pbridgeRequests", JSON.stringify(requests));
       alert(lang === "ar" ? "تم إرسال الطلب بنجاح" : "Request submitted successfully");
       form.reset();
     };
